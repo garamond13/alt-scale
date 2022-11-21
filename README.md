@@ -1,5 +1,5 @@
 # Alt scale
-Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in scaler.\
+Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in scaler.
 
 `altUpscale.glsl` is optimised for and only does upscaling\
 `altDownscale.glsl` is optimised for and only does downscaling
