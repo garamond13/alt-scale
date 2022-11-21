@@ -9,7 +9,7 @@ If you place this shader in the same folder as your `mpv.conf`, you can use it w
 
 ## Settings
 ### Kernel filter (K)
-Which kernel filter function to use for calculation of the kernel weights.
+Which kernel filter function to use for calculation of kernel weights.
 
 ### Kernel radius (R)
 Kernel radius determines the kernel size, which is (2 * kernel radius) when upscaling or (2 * kernel radius * downscale ratio * antialiasing amount) when downscaling.
