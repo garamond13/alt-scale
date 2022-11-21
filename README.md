@@ -24,4 +24,4 @@ Only for downscale. Effectively trades between aliasing and ringing artifacts.
 Some kernel filter functions take additional parameters, they are set here.
 
 ### Sigmoidal curve settings (CONTRAST) and (MIDPOINT)
-CONTRAST is equivalent to mpv's --sigmoid-slope and MIDPOINT is equivalent to mpv's --sigmoid-center
+`CONTRAST` is equivalent to mpv's `--sigmoid-slope` and `MIDPOINT` is equivalent to mpv's `--sigmoid-center`.
