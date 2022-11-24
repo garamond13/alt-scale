@@ -32,7 +32,7 @@ vec4 hook() {
 #define LINEAR 11
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 1
+// USER CONFIGURABLE, PASS 1 (downscale in y axis)
 //
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
@@ -125,7 +125,7 @@ vec4 hook() {
 #define LINEAR 11
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 2
+// USER CONFIGURABLE, PASS 2 (downscale in x axis)
 //
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
