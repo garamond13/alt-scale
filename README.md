@@ -31,7 +31,7 @@ Some kernel filter functions take additional parameters, they are set here.
 #### Sigmoidal curve settings (CONTRAST) and (MIDPOINT)
 `CONTRAST` is equivalent to mpv's `--sigmoid-slope` and `MIDPOINT` is equivalent to mpv's `--sigmoid-center`.
 
-### Unsharp mask
+### Unsharp mask (Only for unsharp versions)
 Note unsharp mask works like this, sharpened = original + (original − blurred) * amount.
 
 #### Blur spread or amount (SIGMA)
