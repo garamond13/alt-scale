@@ -5,7 +5,7 @@
 //!DESC alt upscale pass0
 
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 0
+// USER CONFIGURABLE, PASS 0 (sigmoidize)
 //
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
@@ -44,7 +44,7 @@ vec4 hook() {
 #define BICUBIC 9
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 1
+// USER CONFIGURABLE, PASS 1 (upscale in y axis)
 //
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
@@ -136,7 +136,7 @@ vec4 hook() {
 #define BICUBIC 9
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 2
+// USER CONFIGURABLE, PASS 2 (upscale in x axis and desigmoidize)
 //
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
