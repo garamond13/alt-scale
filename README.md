@@ -4,10 +4,12 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 `altUpscale.glsl` is optimised for and only does upscaling\
 `altUpscaleUnsharp.glsl` is optimised for and only does upscaling, also provides unsharp mask\
 `altDownscale.glsl` is optimised for and only does downscaling\
-`altDownscaleUnsharp.glsl` is optimised for and only does downscaling, also provides unsharp mask
+`altDownscaleUnsharp.glsl` is optimised for and only does downscaling, also provides unsharp mask\
+`altDownscaleGaussian.glsl` is optimised for and only does downscaling, also provides gaussian blur\
+`altDownscaleGaussianUnsharp.glsl` is optimised for and only does downscaling, also provides gaussian blur and unsharp mask
 
 ## Usage
-If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/altUpscale.glsl"` or `glsl-shaders-append="~~/altUpscaleUnsharp.glsl"` or `glsl-shaders-append="~~/altDownscale.glsl"` or `glsl-shaders-append="~~/altDownscaleUnsharp.glsl"`
+If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/FILE_NAME"`. For an example `glsl-shaders-append="~~/altUpscale.glsl"`.
 
 ## Settings
 
@@ -31,7 +33,7 @@ Some kernel filter functions take additional parameters, they are set here.
 #### Sigmoidal curve settings (CONTRAST) and (MIDPOINT)
 `CONTRAST` is equivalent to mpv's `--sigmoid-slope` and `MIDPOINT` is equivalent to mpv's `--sigmoid-center`.
 
-### Unsharp mask (Only for unsharp versions)
+### Gaussian blur and unsharp mask (Only for gaussian and unsharp versions)
 Note unsharp mask works like this, sharpened = original + (original − blurred) * amount.
 
 #### Blur spread or amount (SIGMA)
@@ -40,5 +42,5 @@ Gaussian blur sigma value, controls the blur intensity and how much it will be s
 #### Blur kernel radius (RADIUS)
 Determines how many neighboring pixels will contribute to the blurred value of the center pixel inside the blur kernel.
 
-#### Sharpening amount (AMOUNT)
+#### Sharpening amount (AMOUNT) (Only for unsharp versions)
 Sharpening amount or strenght.
