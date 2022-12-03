@@ -9,7 +9,8 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 `altDownscaleGaussianUnsharp.glsl` is optimised for and only does downscaling, also provides gaussian blur and unsharp mask
 
 ## Usage
-If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/FILE_NAME"`. For an example `glsl-shaders-append="~~/altUpscale.glsl"`.
+If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/FILE_NAME"`. For an example `glsl-shaders-append="~~/altUpscale.glsl"`. \
+Requires `vo=gpu-next`.
 
 ## Settings
 
