@@ -62,7 +62,7 @@ vec4 hook() {
 #elif K == BLACKMAN
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
-    #define k(x) (sinc(x) * (1.0 - x * x / (R * R))))
+    #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-(M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x)))
 #elif K == BCSPLINE
@@ -155,7 +155,7 @@ vec4 hook() {
 #elif K == BLACKMAN
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
-    #define k(x) (sinc(x) * (1.0 - x * x / (R * R))))
+    #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-(M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x)))
 #elif K == BCSPLINE
