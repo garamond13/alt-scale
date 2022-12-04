@@ -66,15 +66,15 @@ vec4 hook() {
 #if K == LANCZOS
     #define k(x) (sinc(x) * sinc(x / R))
 #elif K == COSINE
-    #define k(x) (sinc(x) * cos(M_PI_2 * x / R))
+    #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
 #elif K == HANN
-    #define k(x) (sinc(x) * (0.5 + 0.5 * cos(M_PI * x / R)))
+    #define k(x) (sinc(x) * (0.5 + 0.5 * cos(M_PI / R * x)))
 #elif K == HAMMING
-    #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI * x / R)))
+    #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI / R * x)))
 #elif K == BLACKMAN
-    #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI * x / R) + 0.08 * cos(2.0 * M_PI * x / R)))
+    #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
-    #define k(x) (sinc(x) * (1.0 - (x / R) * (x / R)))
+    #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 * x / (2.0 - P2)) * exp(-((M_PI * P1 * x / (2.0 - P2)) * (M_PI * P1 * x / (2.0 - P2)))))
 #elif K == BCSPLINE
@@ -163,15 +163,15 @@ vec4 hook() {
 #if K == LANCZOS
     #define k(x) (sinc(x) * sinc(x / R))
 #elif K == COSINE
-    #define k(x) (sinc(x) * cos(M_PI_2 * x / R))
+    #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
 #elif K == HANN
-    #define k(x) (sinc(x) * (0.5 + 0.5 * cos(M_PI * x / R)))
+    #define k(x) (sinc(x) * (0.5 + 0.5 * cos(M_PI / R * x)))
 #elif K == HAMMING
-    #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI * x / R)))
+    #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI / R * x)))
 #elif K == BLACKMAN
-    #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI * x / R) + 0.08 * cos(2.0 * M_PI * x / R)))
+    #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
-    #define k(x) (sinc(x) * (1.0 - (x / R) * (x / R)))
+    #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 * x / (2.0 - P2)) * exp(-((M_PI * P1 * x / (2.0 - P2)) * (M_PI * P1 * x / (2.0 - P2)))))
 #elif K == BCSPLINE
