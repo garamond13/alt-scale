@@ -19,7 +19,7 @@
 #define sigmoidize(rgba) (MIDPOINT - log(1.0 / clamp((1.0 / (1.0 + exp(CONTRAST * (MIDPOINT - 1.0))) - 1.0 / (1.0 + exp(CONTRAST * MIDPOINT))) * rgba + 1.0 / (1.0 + exp(CONTRAST * MIDPOINT)), 1e-7, 1.0 - 1e-7) - 1.0) / CONTRAST)
 
 vec4 hook() {
-    return sigmoidize(linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0)));
+    return sigmoidize(clamp(linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0)), 0.0, 1.0));
 }
 
 //!HOOK MAIN
