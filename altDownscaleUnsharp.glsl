@@ -51,7 +51,7 @@ vec4 hook() {
 #define FLT_EPSILON 1.192092896e-07
 
 //kernel filters
-#define sinc(x) (x < FLT_EPSILON ? 1.0 : sin(M_PI * x) / (M_PI * x))
+#define sinc(x) (x < FLT_EPSILON ? 1.0 : sin(M_PI * x) / x)
 #if K == LANCZOS
     #define k(x) (sinc(x) * sinc(x / R))
 #elif K == COSINE
@@ -69,7 +69,7 @@ vec4 hook() {
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
-    #define k(x) (x < 1.0 ? ((12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1)) / 6.0 : ((-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2)) / 6.0)
+    #define k(x) (x < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2))
 #elif K == BICUBIC
     #undef R
     #define R 2.0
@@ -146,7 +146,7 @@ vec4 hook() {
 #define FLT_EPSILON 1.192092896e-07
 
 //kernel filters
-#define sinc(x) (x < FLT_EPSILON ? 1.0 : sin(M_PI * x) / (M_PI * x))
+#define sinc(x) (x < FLT_EPSILON ? 1.0 : sin(M_PI * x) / x)
 #if K == LANCZOS
     #define k(x) (sinc(x) * sinc(x / R))
 #elif K == COSINE
@@ -164,7 +164,7 @@ vec4 hook() {
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
-    #define k(x) (x < 1.0 ? ((12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1)) / 6.0 : ((-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2)) / 6.0)
+    #define k(x) (x < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2))
 #elif K == BICUBIC
     #undef R
     #define R 2.0
