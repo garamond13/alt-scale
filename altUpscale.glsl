@@ -65,7 +65,7 @@ vec4 hook() {
 #define FLT_EPSILON 1.192092896e-07
 
 //kernel filters
-#define sinc(x) (x < FLT_EPSILON ? 1.0 : sin(M_PI * x) / x)
+#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI * x) / x)
 #if K == LANCZOS
     #define k(x) (sinc(x) * sinc(x / R))
 #elif K == COSINE
@@ -163,7 +163,7 @@ vec4 hook() {
 #define FLT_EPSILON 1.192092896e-07
 
 //kernel filters
-#define sinc(x) (x < FLT_EPSILON ? 1.0 : sin(M_PI * x) / x)
+#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI * x) / x)
 #if K == LANCZOS
     #define k(x) (sinc(x) * sinc(x / R))
 #elif K == COSINE
