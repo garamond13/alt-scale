@@ -32,8 +32,7 @@ vec4 hook() {
     float wsum = weight;
     for(float i = 1.0; i <= RADIUS; ++i) {
         weight = get_weight(i);
-        csum += textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, -i), 0.0) * weight;
-        csum += textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, i), 0.0) * weight;
+        csum += (textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, -i), 0.0) + textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, i), 0.0)) * weight;
         wsum += 2.0 * weight;
     }
     return csum / wsum;
@@ -63,8 +62,7 @@ vec4 hook() {
     float wsum = weight;
     for(float i = 1.0; i <= RADIUS; ++i) {
         weight = get_weight(i);
-        csum += textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(-i, 0.0), 0.0) * weight;
-        csum += textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(i, 0.0), 0.0) * weight;
+        csum += (textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(i, 0.0), 0.0)) * weight;
         wsum += 2.0 * weight;
     }
     return csum / wsum;
@@ -285,8 +283,7 @@ vec4 hook() {
     float wsum = weight;
     for(float i = 1.0; i <= RADIUS; ++i) {
         weight = get_weight(i);
-        csum += textureLod(PASS4_raw, PASS4_pos + PASS4_pt * vec2(0.0, -i), 0.0) * weight;
-        csum += textureLod(PASS4_raw, PASS4_pos + PASS4_pt * vec2(0.0, i), 0.0) * weight;
+        csum += (textureLod(PASS4_raw, PASS4_pos + PASS4_pt * vec2(0.0, -i), 0.0) + textureLod(PASS4_raw, PASS4_pos + PASS4_pt * vec2(0.0, i), 0.0)) * weight;
         wsum += 2.0 * weight;
     }
     return csum / wsum;
@@ -321,8 +318,7 @@ vec4 hook() {
     float wsum = weight;
     for(float i = 1.0; i <= RADIUS; ++i) {
         weight = get_weight(i);
-        csum += textureLod(PASS5_raw, PASS5_pos + PASS5_pt * vec2(-i, 0.0), 0.0) * weight;
-        csum += textureLod(PASS5_raw, PASS5_pos + PASS5_pt * vec2(i, 0.0), 0.0) * weight;
+        csum += (textureLod(PASS5_raw, PASS5_pos + PASS5_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS5_raw, PASS5_pos + PASS5_pt * vec2(i, 0.0), 0.0)) * weight;
         wsum += 2.0 * weight;
     }
     vec4 original = textureLod(PASS4_raw, PASS4_pos, 0.0);
