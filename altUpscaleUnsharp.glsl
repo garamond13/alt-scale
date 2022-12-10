@@ -52,6 +52,7 @@ vec4 hook() {
 //
 #define K LANCZOS //wich kernel filter to use, see "KERNEL FILTERS LIST"
 #define R 2.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
+#define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
 //kernel parameters
@@ -65,9 +66,9 @@ vec4 hook() {
 #define FLT_EPSILON 1.192092896e-07
 
 //kernel filters
-#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI * x) / x)
+#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
 #if K == LANCZOS
-    #define k(x) (sinc(x) * sinc(x / R))
+    #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
     #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
 #elif K == HANN
@@ -146,6 +147,7 @@ vec4 hook() {
 //
 #define K LANCZOS //wich kernel filter to use, see "KERNEL FILTERS LIST"
 #define R 2.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
+#define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
 //kernel parameters
@@ -164,9 +166,9 @@ vec4 hook() {
 #define FLT_EPSILON 1.192092896e-07
 
 //kernel filters
-#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI * x) / x)
+#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
 #if K == LANCZOS
-    #define k(x) (sinc(x) * sinc(x / R))
+    #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
     #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
 #elif K == HANN
