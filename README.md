@@ -22,6 +22,9 @@ Which kernel filter function to use for calculation of kernel weights.
 #### Kernel radius (R)
 Kernel radius determines the kernel size, which is (2 * kernel radius) when upscaling or (2 * kernel radius * downscale ratio * antialiasing amount) when downscaling.
 
+#### Kernel blur (B)
+Effectively values smaller than 1 sharpen the kernel and values larger than 1 blur the kernel, 1 is neutral. Only affects widowed sinc kernels.
+
 #### Antiringing (AR)
 Only for upscale. Reduces ringing artifacts.
 
