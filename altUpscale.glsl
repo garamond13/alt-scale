@@ -51,7 +51,7 @@ vec4 hook() {
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
 #define K LANCZOS //wich kernel filter to use, see "KERNEL FILTERS LIST"
-#define R 2.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
+#define R 2.0 //kernel radius, (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 0.0 //antiringing strenght, [0.0, 1.0]
 //
@@ -102,7 +102,7 @@ vec4 hook() {
     float wsum = 0.0;
     vec4 low = vec4(1.0);
     vec4 high = vec4(0.0);
-    for (float i = 1.0 - R; i <= R; ++i) {
+    for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
         color = textureLod(PASS0_raw, base + PASS0_pt * vec2(0.0, i), 0.0);
         csum += color * weight;
@@ -145,7 +145,7 @@ vec4 hook() {
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
 #define K LANCZOS //wich kernel filter to use, see "KERNEL FILTERS LIST"
-#define R 2.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
+#define R 2.0 //kernel radius, (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 0.0 //antiringing strenght, [0.0, 1.0]
 //
@@ -204,7 +204,7 @@ vec4 hook() {
     float wsum = 0.0;
     vec4 low = vec4(1.0);
     vec4 high = vec4(0.0);
-    for (float i = 1.0 - R; i <= R; ++i) {
+    for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
         color = textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0);
         csum += color * weight;
