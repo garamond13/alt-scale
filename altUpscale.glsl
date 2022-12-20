@@ -217,5 +217,5 @@ vec4 hook() {
     csum /= wsum;
     if (AR > 0.0)
         csum = mix(csum, clamp(csum, low, high), AR);
-    return delinearize(desigmoidize(csum));
+    return delinearize(clamp(desigmoidize(csum), 0.0, 1.0));
 }
