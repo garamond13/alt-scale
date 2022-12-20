@@ -255,5 +255,5 @@ vec4 hook() {
         csum += textureLod(PASS3_raw, base + PASS3_pt * vec2(i, 0.0), 0.0) * weight;
         wsum += weight;
     }
-    return delinearize(csum / wsum);
+    return delinearize(clamp(csum / wsum, 0.0, 1.0));
 }
