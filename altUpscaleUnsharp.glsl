@@ -239,7 +239,7 @@ vec4 hook() {
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define get_weight(x) (exp(-(x * x / (2.0 * SIGMA * SIGMA))))
+#define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
 
 vec4 hook() {
     float weight = get_weight(0.0);
@@ -274,7 +274,7 @@ vec4 hook() {
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define get_weight(x) (exp(-(x * x / (2.0 * SIGMA * SIGMA))))
+#define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
 
 vec4 hook() {
     float weight = get_weight(0.0);
