@@ -242,9 +242,9 @@ vec4 hook() {
 #define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
 
 vec4 hook() {
-    float weight = get_weight(0.0);
-    vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0) * weight;
-    float wsum = weight;
+    float weight;
+    vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0);
+    float wsum = 1.0;
     for(float i = 1.0; i <= RADIUS; ++i) {
         weight = get_weight(i);
         csum += (textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, -i), 0.0) + textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, i), 0.0)) * weight;
@@ -277,9 +277,9 @@ vec4 hook() {
 #define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
 
 vec4 hook() {
-    float weight = get_weight(0.0);
-    vec4 csum = textureLod(PASS3_raw, PASS3_pos, 0.0) * weight;
-    float wsum = weight;
+    float weight;
+    vec4 csum = textureLod(PASS3_raw, PASS3_pos, 0.0);
+    float wsum = 1.0;
     for(float i = 1.0; i <= RADIUS; ++i) {
         weight = get_weight(i);
         csum += (textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(i, 0.0), 0.0)) * weight;
