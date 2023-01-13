@@ -229,14 +229,14 @@ vec4 hook() {
     #undef R
     #define R 2.0
     #define k(x) (x < 1.0 ? (P1 + 2.0) * x * x * x - (P1 + 3.0) * x * x + 1.0 : P1 * x * x * x - 5.0 * P1 * x * x + 8.0 * P1 * x - 4.0 * P1)
-#elif K == NEAREST
-    #undef R
-    #define R 0.5
-    #define k(x) (1.0)
 #elif K == LINEAR
     #undef R
     #define R 1.0
     #define k(x) (1.0 - x)
+#elif K == NEAREST
+    #undef R
+    #define R 0.5
+    #define k(x) (1.0)
 #endif
 
 #define get_weight(x) (x < R ? k(x) : 0.0)
