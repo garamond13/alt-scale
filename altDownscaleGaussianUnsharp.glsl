@@ -5,7 +5,7 @@
 //!DESC alt downscale pass0
 
 vec4 hook() {
-    return linearize(clamp(textureLod(HOOKED_raw, HOOKED_pos, 0.0), 0.0, 1.0));
+    return linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0));
 }
 
 //!HOOK MAIN
@@ -17,20 +17,20 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 1 (blur in y axis)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
-#define SIGMA 1.0 //blur spread or amount, (0.0, 10+]
-#define RADIUS 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * sigma)
+#define S 1.0 //blur spread or amount, (0.0, 10+]
+#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
+#define get_weight(x) (exp(-x * x / (2.0 * S * S)))
 
 vec4 hook() {
     float weight;
     vec4 csum = textureLod(PASS0_raw, PASS0_pos, 0.0);
     float wsum = 1.0;
-    for(float i = 1.0; i <= RADIUS; ++i) {
+    for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
         csum += (textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, -i), 0.0) + textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, i), 0.0)) * weight;
         wsum += 2.0 * weight;
@@ -47,14 +47,14 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 2 (blur in x axis)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
-#define SIGMA 1.0 //blur spread or amount, (0.0, 10+]
-#define RADIUS 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * sigma)
+#define S 1.0 //blur spread or amount, (0.0, 10+]
+#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
+#define get_weight(x) (exp(-x * x / (2.0 * S * S)))
 
 vec4 hook() {
     float weight;
@@ -76,7 +76,6 @@ vec4 hook() {
 //!DESC alt downscale pass3
 
 ////////////////////////////////////////////////////////////////////////
-//
 // KERNEL FILTERS LIST
 //
 #define LANCZOS 1
@@ -88,15 +87,15 @@ vec4 hook() {
 #define SAID 7
 #define BCSPLINE 8
 #define BICUBIC 9
-#define NEAREST 10
-#define LINEAR 11
+#define LINEAR 10
+#define NEAREST 11
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 3 (downscale in y axis)
+// USER CONFIGURABLE, PASS 3 (downsample in y axis)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 4" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 4" below
 //
-#define K HAMMING //wich kernel filter to use, see "KERNEL FILTERS LIST"
+#define K HAMMING //kernel filter, see "KERNEL FILTERS LIST"
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0]
@@ -111,8 +110,8 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define FLT_EPSILON 1.192092896e-07
 
-//kernel filters
 #define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
@@ -125,8 +124,8 @@ vec4 hook() {
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
-#elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
-    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-(M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x)))
+#elif K == SAID
+    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
@@ -135,18 +134,18 @@ vec4 hook() {
     #undef R
     #define R 2.0
     #define k(x) (x < 1.0 ? (P1 + 2.0) * x * x * x - (P1 + 3.0) * x * x + 1.0 : P1 * x * x * x - 5.0 * P1 * x * x + 8.0 * P1 * x - 4.0 * P1)
-#elif K == NEAREST
-    #undef R
-    #define R 0.5
-    #define k(x) (1.0)
 #elif K == LINEAR
     #undef R
     #define R 1.0
     #define k(x) (1.0 - x)
+#elif K == NEAREST
+    #undef R
+    #define R 0.5
+    #define k(x) (1.0)
 #endif
+
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
-//sample in y axis
 vec4 hook() {
     float fcoord = fract(PASS2_pos.y * input_size.y - 0.5);
     vec2 base = PASS2_pos - fcoord * PASS2_pt * vec2(0.0, 1.0);
@@ -172,7 +171,6 @@ vec4 hook() {
 //!DESC alt downscale pass4
 
 ////////////////////////////////////////////////////////////////////////
-//
 // KERNEL FILTERS LIST
 //
 #define LANCZOS 1
@@ -184,15 +182,15 @@ vec4 hook() {
 #define SAID 7
 #define BCSPLINE 8
 #define BICUBIC 9
-#define NEAREST 10
-#define LINEAR 11
+#define LINEAR 10
+#define NEAREST 11
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 4 (downscale in x axis)
+// USER CONFIGURABLE, PASS 4 (downsample in x axis)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
 //
-#define K HAMMING //wich kernel filter to use, see "KERNEL FILTERS LIST"
+#define K HAMMING //kernel filter, see "KERNEL FILTERS LIST"
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0]
@@ -207,8 +205,8 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define FLT_EPSILON 1.192092896e-07
 
-//kernel filters
 #define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
@@ -221,8 +219,8 @@ vec4 hook() {
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
-#elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
-    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-(M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x)))
+#elif K == SAID
+    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
@@ -240,9 +238,9 @@ vec4 hook() {
     #define R 1.0
     #define k(x) (1.0 - x)
 #endif
+
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
-//sample in x axis
 vec4 hook() {
     float fcoord = fract(PASS3_pos.x * input_size.x - 0.5);
     vec2 base = PASS3_pos - fcoord * PASS3_pt * vec2(1.0, 0.0);
@@ -270,20 +268,20 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 5 (blur in y axis)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 6" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 6" below
 //
-#define SIGMA 1.0 //blur spread or amount, (0.0, 10+]
-#define RADIUS 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * sigma)
+#define S 1.0 //blur spread or amount, (0.0, 10+]
+#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
+#define get_weight(x) (exp(-x * x / (2.0 * S * S)))
 
 vec4 hook() {
     float weight;
     vec4 csum = textureLod(PASS4_raw, PASS4_pos, 0.0);
     float wsum = 1.0;
-    for(float i = 1.0; i <= RADIUS; ++i) {
+    for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
         csum += (textureLod(PASS4_raw, PASS4_pos + PASS4_pt * vec2(0.0, -i), 0.0) + textureLod(PASS4_raw, PASS4_pos + PASS4_pt * vec2(0.0, i), 0.0)) * weight;
         wsum += 2.0 * weight;
@@ -300,29 +298,29 @@ vec4 hook() {
 //!DESC alt downscale pass6
 
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 6 (blur in x axis and aply unsharp mask)
+// USER CONFIGURABLE, PASS 6 (blur in x axis and apply unsharp mask)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 5" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 5" above
 //
-#define SIGMA 1.0 //blur spread or amount, (0.0, 10+]
-#define RADIUS 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * sigma)
+#define S 1.0 //blur spread or amount, (0.0, 10+]
+#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
 //
 //sharpnes
-#define AMOUNT 0.5 //amount of sharpening [0.0, 10+]
+#define A 0.5 //amount of sharpening [0.0, 10+]
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define get_weight(x) (exp(-x * x / (2.0 * SIGMA * SIGMA)))
+#define get_weight(x) (exp(-x * x / (2.0 * S * S)))
 
 vec4 hook() {
     float weight;
     vec4 csum = textureLod(PASS5_raw, PASS5_pos, 0.0);
     float wsum = 1.0;
-    for(float i = 1.0; i <= RADIUS; ++i) {
+    for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
         csum += (textureLod(PASS5_raw, PASS5_pos + PASS5_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS5_raw, PASS5_pos + PASS5_pt * vec2(i, 0.0), 0.0)) * weight;
         wsum += 2.0 * weight;
     }
     vec4 original = textureLod(PASS4_raw, PASS4_pos, 0.0);
-    return delinearize(clamp(original + (original - csum / wsum) * AMOUNT, 0.0, 1.0));
+    return delinearize(original + (original - csum / wsum) * A);
 }

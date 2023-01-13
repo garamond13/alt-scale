@@ -10,18 +10,18 @@
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
 //sigmoidal curve
-#define CONTRAST 6.5 //equivalent to mpv's --sigmoid-slope
-#define MIDPOINT 0.75 //equivalent to mpv's --sigmoid-center
+#define C 6.5 //contrast, equivalent to mpv's --sigmoid-slope
+#define M 0.75 //midpoint, equivalent to mpv's --sigmoid-center
 //
 ////////////////////////////////////////////////////////////////////////
 
 #define FLT_EPSILON 1.192092896e-07
 
 //based on https://github.com/ImageMagick/ImageMagick/blob/main/MagickCore/enhance.c
-#define sigmoidize(rgba) (MIDPOINT - log(1.0 / clamp((1.0 / (1.0 + exp(CONTRAST * (MIDPOINT - 1.0))) - 1.0 / (1.0 + exp(CONTRAST * MIDPOINT))) * rgba + 1.0 / (1.0 + exp(CONTRAST * MIDPOINT)), FLT_EPSILON, 1.0 - FLT_EPSILON) - 1.0) / CONTRAST)
+#define sigmoidize(rgba) (M - log(1.0 / clamp((1.0 / (1.0 + exp(C * (M - 1.0))) - 1.0 / (1.0 + exp(C * M))) * rgba + 1.0 / (1.0 + exp(C * M)), FLT_EPSILON, 1.0 - FLT_EPSILON) - 1.0) / C)
 
 vec4 hook() {
-    return sigmoidize(linearize(clamp(textureLod(HOOKED_raw, HOOKED_pos, 0.0), 0.0, 1.0)));
+    return sigmoidize(clamp(linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0)), 0.0, 1.0));
 }
 
 //!HOOK MAIN
@@ -32,7 +32,6 @@ vec4 hook() {
 //!DESC alt upscale pass1
 
 ////////////////////////////////////////////////////////////////////////
-//
 // KERNEL FILTERS LIST
 //
 #define LANCZOS 1
@@ -46,11 +45,11 @@ vec4 hook() {
 #define BICUBIC 9
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 1 (upscale in y axis)
+// USER CONFIGURABLE, PASS 1 (upsample in y axis)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
-#define K LANCZOS //wich kernel filter to use, see "KERNEL FILTERS LIST"
+#define K LANCZOS //kernel filter, see "KERNEL FILTERS LIST"
 #define R 2.0 //kernel radius, (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 0.0 //antiringing strenght, [0.0, 1.0]
@@ -65,8 +64,8 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define FLT_EPSILON 1.192092896e-07
 
-//kernel filters
 #define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
@@ -79,8 +78,8 @@ vec4 hook() {
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
-#elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
-    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-(M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x)))
+#elif K == SAID
+    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
@@ -90,9 +89,9 @@ vec4 hook() {
     #define R 2.0
     #define k(x) (x < 1.0 ? (P1 + 2.0) * x * x * x - (P1 + 3.0) * x * x + 1.0 : P1 * x * x * x - 5.0 * P1 * x * x + 8.0 * P1 * x - 4.0 * P1)
 #endif
+
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
-//sample in y axis
 vec4 hook() {
     float fcoord = fract(PASS0_pos.y * input_size.y - 0.5);
     vec2 base = PASS0_pos - fcoord * PASS0_pt * vec2(0.0, 1.0);
@@ -126,7 +125,6 @@ vec4 hook() {
 //!DESC alt upscale pass2
 
 ////////////////////////////////////////////////////////////////////////
-//
 // KERNEL FILTERS LIST
 //
 #define LANCZOS 1
@@ -140,11 +138,11 @@ vec4 hook() {
 #define BICUBIC 9
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 2 (upscale in x axis and desigmoidize)
+// USER CONFIGURABLE, PASS 2 (upsample in x axis and desigmoidize)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
-#define K LANCZOS //wich kernel filter to use, see "KERNEL FILTERS LIST"
+#define K LANCZOS //kernel filter, see "KERNEL FILTERS LIST"
 #define R 2.0 //kernel radius, (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 0.0 //antiringing strenght, [0.0, 1.0]
@@ -155,8 +153,8 @@ vec4 hook() {
 //
 //CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 0" above
 //
-#define CONTRAST 6.5 //equivalent to mpv's --sigmoid-slope
-#define MIDPOINT 0.75 //equivalent to mpv's --sigmoid-center
+#define C 6.5 //contrast, equivalent to mpv's --sigmoid-slope
+#define M 0.75 //midpoint, equivalent to mpv's --sigmoid-center
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -164,8 +162,8 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define FLT_EPSILON 1.192092896e-07
 
-//kernel filters
 #define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
@@ -178,8 +176,8 @@ vec4 hook() {
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
-#elif K == SAID //source https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf
-    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-(M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x)))
+#elif K == SAID
+    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
@@ -189,12 +187,12 @@ vec4 hook() {
     #define R 2.0
     #define k(x) (x < 1.0 ? (P1 + 2.0) * x * x * x - (P1 + 3.0) * x * x + 1.0 : P1 * x * x * x - 5.0 * P1 * x * x + 8.0 * P1 * x - 4.0 * P1)
 #endif
+
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
 //based on https://github.com/ImageMagick/ImageMagick/blob/main/MagickCore/enhance.c
-#define desigmoidize(rgba) (1.0 / (1.0 + exp(CONTRAST * (MIDPOINT - rgba))) - 1.0 / (1.0 + exp(CONTRAST * MIDPOINT))) / ( 1.0 / (1.0 + exp(CONTRAST * (MIDPOINT - 1.0))) - 1.0 / (1.0 + exp(CONTRAST * MIDPOINT)))
+#define desigmoidize(rgba) (1.0 / (1.0 + exp(C * (M - rgba))) - 1.0 / (1.0 + exp(C * M))) / ( 1.0 / (1.0 + exp(C * (M - 1.0))) - 1.0 / (1.0 + exp(C * M)))
 
-//sample in x axis
 vec4 hook() {
     float fcoord = fract(PASS1_pos.x * input_size.x - 0.5);
     vec2 base = PASS1_pos - fcoord * PASS1_pt * vec2(1.0, 0.0);
@@ -217,5 +215,5 @@ vec4 hook() {
     csum /= wsum;
     if (AR > 0.0)
         csum = mix(csum, clamp(csum, low, high), AR);
-    return delinearize(clamp(desigmoidize(csum), 0.0, 1.0));
+    return delinearize(desigmoidize(csum));
 }
