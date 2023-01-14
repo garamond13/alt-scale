@@ -7,7 +7,7 @@
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 0 (sigmoidize)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
 //
 //sigmoidal curve
 #define C 6.5 //contrast, equivalent to mpv's --sigmoid-slope
@@ -151,7 +151,7 @@ vec4 hook() {
 #define P1 0.0 //SAID: chi, BCSPLINE: B, BICUBIC: alpha
 #define P2 0.0 //SAID: eta, BCSPLINE: C
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 0" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 0" above
 //
 #define C 6.5 //contrast, equivalent to mpv's --sigmoid-slope
 #define M 0.75 //midpoint, equivalent to mpv's --sigmoid-center

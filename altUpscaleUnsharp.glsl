@@ -152,7 +152,7 @@ vec4 hook() {
 #define P1 0.0 //SAID: chi, BCSPLINE: B, BICUBIC: alpha
 #define P2 0.0 //SAID: eta, BCSPLINE: C
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 0" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 0" above
 //
 #define C 6.5 //contrast, equivalent to mpv's --sigmoid-slope
 #define M 0.75 //midpoint, equivalent to mpv's --sigmoid-center
@@ -262,7 +262,7 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 3 (blur in x axis and apply unsharp mask)
 //
-//CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
 //
 #define S 1.0 //blur spread or amount, (0.0, 10+]
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
