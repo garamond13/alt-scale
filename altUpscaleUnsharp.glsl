@@ -260,7 +260,7 @@ vec4 hook() {
 //!DESC alt upscale pass4
 
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 3 (blur in x axis and apply unsharp mask)
+// USER CONFIGURABLE, PASS 4 (blur in x axis and apply unsharp mask)
 //
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
 //
