@@ -41,9 +41,9 @@ BICUBIC - https://en.wikipedia.org/wiki/Bicubic_interpolation
 Contrast `C` is equivalent to mpv's `--sigmoid-slope` and midpoint `M` is equivalent to mpv's `--sigmoid-center`.
 
 ### Gaussian blur and unsharp mask (Only for gaussian and unsharp versions)
-- Unsharp mask works like this: sharpened = original + (original − blurred) * amount
-- Blur kernel radius is independent from scaling kernel radius
-- For shaders with both unsharp mask and gaussian blur all settings are independent
+- Unsharp mask works like this: sharpened = original + (original − blurred) * amount.
+- Blur kernel radius is independent from scaling kernel radius.
+- For shaders with both unsharp mask and gaussian blur all settings are independent.
 
 #### Blur spread or amount (S)
 Gaussian blur sigma value, controls the blur intensity and how much it will be spread accros the blur kernel.
