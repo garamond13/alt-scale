@@ -15,10 +15,8 @@ Note that defualt settings are "simbolic" only, should change them to your likin
 
 ## Settings
 
-### Scaling
-
 #### Kernel filter (K)
-Which kernel filter function to use for calculation of kernel weights.
+Which kernel filter to use for calculation of kernel weights. See "KERNEL FILTERS LIST" inside the shader for available kernel filters.
 
 #### Kernel radius (R)
 Kernel radius determines the kernel size, which is `ceil(2 * kernel radius)` when upsampling (upscale) or `ceil(2 * kernel radius * downscale ratio * antialiasing amount)` when downsampling (downscale).
@@ -39,13 +37,13 @@ SAID - https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf \
 BCSPLINE - https://www.cs.utexas.edu/~fussell/courses/cs384g-fall2013/lectures/mitchell/Mitchell.pdf \
 BICUBIC - https://en.wikipedia.org/wiki/Bicubic_interpolation
 
-#### Sigmoidal curve settings (C) and (M)
+#### Sigmoidal curve settings (C) and (M) (Only for upscale)
 Contrast `C` is equivalent to mpv's `--sigmoid-slope` and midpoint `M` is equivalent to mpv's `--sigmoid-center`.
 
 ### Gaussian blur and unsharp mask (Only for gaussian and unsharp versions)
-Note 1: unsharp mask works like this, sharpened = original + (original − blurred) * amount\
-Note 2: blur kernel radius is independent from scaling kernel radius\
-Note 3: for shaders with both unsharp mask and gaussian blur all settings are independent
+- unsharp mask works like this, sharpened = original + (original − blurred) * amount
+- blur kernel radius is independent from scaling kernel radius
+- for shaders with both unsharp mask and gaussian blur all settings are independent
 
 #### Blur spread or amount (S)
 Gaussian blur sigma value, controls the blur intensity and how much it will be spread accros the blur kernel.
