@@ -5,7 +5,7 @@
 //!DESC alt downscale pass0
 
 vec4 hook() {
-    return linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0));
+    return linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0) * HOOKED_mul);
 }
 
 //!HOOK MAIN
@@ -96,7 +96,7 @@ vec4 hook() {
     float wsum = 0.0;
     for (float i = 1.0 - r; i <= r; ++i) {
         weight = get_weight(abs((i - fcoord) / scale));
-        csum += textureLod(PASS0_raw, base + PASS0_pt * vec2(0.0, i), 0.0) * weight;
+        csum += textureLod(PASS0_raw, base + PASS0_pt * vec2(0.0, i), 0.0) * PASS0_mul * weight;
         wsum += weight;
     }
     return csum / wsum;
@@ -191,7 +191,7 @@ vec4 hook() {
     float wsum = 0.0;
     for (float i = 1.0 - r; i <= r; ++i) {
         weight = get_weight(abs((i - fcoord) / scale));
-        csum += textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0) * weight;
+        csum += textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0) * PASS1_mul * weight;
         wsum += weight;
     }
     return csum / wsum;
@@ -219,11 +219,11 @@ vec4 hook() {
 
 vec4 hook() {
     float weight;
-    vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0);
+    vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0) * PASS2_mul;
     float wsum = 1.0;
     for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
-        csum += (textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, -i), 0.0) + textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, i), 0.0)) * weight;
+        csum += (textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, -i), 0.0) + textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, i), 0.0)) * PASS2_mul * weight;
         wsum += 2.0 * weight;
     }
     return csum / wsum;
@@ -254,13 +254,13 @@ vec4 hook() {
 
 vec4 hook() {
     float weight;
-    vec4 csum = textureLod(PASS3_raw, PASS3_pos, 0.0);
+    vec4 csum = textureLod(PASS3_raw, PASS3_pos, 0.0) * PASS3_mul;
     float wsum = 1.0;
     for(float i = 1.0; i <= RADIUS; ++i) {
         weight = get_weight(i);
-        csum += (textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(i, 0.0), 0.0)) * weight;
+        csum += (textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(i, 0.0), 0.0)) * PASS3_mul * weight;
         wsum += 2.0 * weight;
     }
-    vec4 original = textureLod(PASS2_raw, PASS2_pos, 0.0);
+    vec4 original = textureLod(PASS2_raw, PASS2_pos, 0.0) * PASS2_mul;
     return delinearize(original + (original - csum / wsum) * A);
 }

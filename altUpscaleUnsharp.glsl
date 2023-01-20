@@ -21,7 +21,7 @@
 #define sigmoidize(rgba) (M - log(1.0 / clamp((1.0 / (1.0 + exp(C * (M - 1.0))) - 1.0 / (1.0 + exp(C * M))) * rgba + 1.0 / (1.0 + exp(C * M)), FLT_EPSILON, 1.0 - FLT_EPSILON) - 1.0) / C)
 
 vec4 hook() {
-    return sigmoidize(clamp(linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0)), 0.0, 1.0));
+    return sigmoidize(clamp(linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0) * HOOKED_mul), 0.0, 1.0));
 }
 
 //!HOOK MAIN
@@ -103,7 +103,7 @@ vec4 hook() {
     vec4 high = vec4(0.0);
     for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
-        color = textureLod(PASS0_raw, base + PASS0_pt * vec2(0.0, i), 0.0);
+        color = textureLod(PASS0_raw, base + PASS0_pt * vec2(0.0, i), 0.0) * PASS0_mul;
         csum += color * weight;
         wsum += weight;
         if (AR > 0.0 && i >= 0.0 && i <= 1.0) {
@@ -205,7 +205,7 @@ vec4 hook() {
     vec4 high = vec4(0.0);
     for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
-        color = textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0);
+        color = textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0) * PASS1_mul;
         csum += color * weight;
         wsum += weight;
         if (AR > 0.0 && i >= 0.0 && i <= 1.0) {
@@ -241,11 +241,11 @@ vec4 hook() {
 
 vec4 hook() {
     float weight;
-    vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0);
+    vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0) * PASS2_mul;
     float wsum = 1.0;
     for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
-        csum += (textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, -i), 0.0) + textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, i), 0.0)) * weight;
+        csum += (textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, -i), 0.0) + textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(0.0, i), 0.0)) * PASS2_mul * weight;
         wsum += 2.0 * weight;
     }
     return csum / wsum;
@@ -276,13 +276,13 @@ vec4 hook() {
 
 vec4 hook() {
     float weight;
-    vec4 csum = textureLod(PASS3_raw, PASS3_pos, 0.0);
+    vec4 csum = textureLod(PASS3_raw, PASS3_pos, 0.0) * PASS3_mul;
     float wsum = 1.0;
     for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
-        csum += (textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(i, 0.0), 0.0)) * weight;
+        csum += (textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS3_raw, PASS3_pos + PASS3_pt * vec2(i, 0.0), 0.0)) * PASS3_mul * weight;
         wsum += 2.0 * weight;
     }
-    vec4 original = textureLod(PASS2_raw, PASS2_pos, 0.0);
+    vec4 original = textureLod(PASS2_raw, PASS2_pos, 0.0) * PASS2_mul;
     return delinearize(original + (original - csum / wsum) * A);
 }
