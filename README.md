@@ -6,7 +6,8 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 `altDownscale.glsl` is optimised for and only does downscaling\
 `altDownscaleUnsharp.glsl` is optimised for and only does downscaling, also provides unsharp mask\
 `altDownscaleGaussian.glsl` is optimised for and only does downscaling, also provides gaussian blur\
-`altDownscaleGaussianUnsharp.glsl` is optimised for and only does downscaling, also provides gaussian blur and unsharp mask
+`altDownscaleGaussianUnsharp.glsl` is optimised for and only does downscaling, also provides gaussian blur and unsharp mask\
+High Dynamic Range (HDR) versions of above shaders are in the HDR folder. They are also optimised for HDR.
 
 ## Usage
 - If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/FILE_NAME"`. For an example `glsl-shaders-append="~~/altUpscale.glsl"`.
@@ -37,7 +38,7 @@ SAID - https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf \
 BCSPLINE - https://www.cs.utexas.edu/~fussell/courses/cs384g-fall2013/lectures/mitchell/Mitchell.pdf \
 BICUBIC - https://en.wikipedia.org/wiki/Bicubic_interpolation
 
-#### Sigmoidal curve settings (C) and (M) (Only for upscale)
+#### Sigmoidal curve settings (C) and (M) (Only for upscale and not part of HDR versions)
 Contrast `C` is equivalent to mpv's `--sigmoid-slope` and midpoint `M` is equivalent to mpv's `--sigmoid-center`.
 
 ### Gaussian blur and unsharp mask (Only for gaussian and unsharp versions)
