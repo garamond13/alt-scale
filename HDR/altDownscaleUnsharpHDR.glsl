@@ -227,7 +227,7 @@ vec4 hook() {
 //!DESC alt downscale pass4
 
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 3 (blur in x axis and apply unsharp mask)
+// USER CONFIGURABLE, PASS 4 (blur in x axis and apply unsharp mask)
 //
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
 //
@@ -245,7 +245,7 @@ vec4 hook() {
     float weight;
     vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0) * PASS2_mul;
     float wsum = 1.0;
-    for(float i = 1.0; i <= RADIUS; ++i) {
+    for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
         csum += (textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(i, 0.0), 0.0)) * PASS2_mul * weight;
         wsum += 2.0 * weight;
