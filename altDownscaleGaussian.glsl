@@ -108,12 +108,12 @@ vec4 hook() {
 
 #define M_PI 3.14159265358979323846
 #define M_PI_2 1.57079632679489661923
-#define FLT_EPSILON 1.192092896e-07
+#define EPSILON 1.2e-7
 
-#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+#define sinc(x) (x < EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
+    #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
     #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
 #elif K == HANN
@@ -202,12 +202,12 @@ vec4 hook() {
 
 #define M_PI 3.14159265358979323846
 #define M_PI_2 1.57079632679489661923
-#define FLT_EPSILON 1.192092896e-07
+#define EPSILON 1.2e-7
 
-#define sinc(x) (x < FLT_EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+#define sinc(x) (x < EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * (x < FLT_EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
+    #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
     #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
 #elif K == HANN
