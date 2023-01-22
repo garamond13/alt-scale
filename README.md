@@ -3,16 +3,18 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 
 `altUpscale.glsl` is optimised for and only does upscaling\
 `altUpscaleUnsharp.glsl` is optimised for and only does upscaling, also provides unsharp mask\
+`altUpscaleHDR.glsl` is optimised for and only does upscaling; HDR version\
+`altUpscaleUnsharpHDR.glsl` is optimised for and only does upscaling, also provides unsharp mask; HDR version\
 `altDownscale.glsl` is optimised for and only does downscaling\
 `altDownscaleUnsharp.glsl` is optimised for and only does downscaling, also provides unsharp mask\
 `altDownscaleGaussian.glsl` is optimised for and only does downscaling, also provides gaussian blur\
 `altDownscaleGaussianUnsharp.glsl` is optimised for and only does downscaling, also provides gaussian blur and unsharp mask\
-High Dynamic Range (HDR) versions of above shaders are in the HDR folder. They are also optimised for HDR.
 
 ## Usage
 - If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/FILE_NAME"`. For an example `glsl-shaders-append="~~/altUpscale.glsl"`.
 - Requires `vo=gpu-next`.
 - Note that defualt settings are "simbolic" only, should change them to your liking.
+- Note that downscale shaders can be used for both SDR and HDR content.
 
 ## Settings
 
