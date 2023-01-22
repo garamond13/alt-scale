@@ -217,8 +217,8 @@ vec4 hook() {
 }
 
 //!HOOK MAIN
+//!BIND PASS1
 //!BIND PASS2
-//!BIND PASS3
 //!WIDTH OUTPUT.w
 //!HEIGHT OUTPUT.h
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * >
