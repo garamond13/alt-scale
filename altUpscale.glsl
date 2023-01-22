@@ -99,8 +99,8 @@ vec4 hook() {
     float weight;
     vec4 csum = vec4(0.0);
     float wsum = 0.0;
-    vec4 low = vec4(1.0);
-    vec4 high = vec4(0.0);
+    vec4 low = vec4(1e9);
+    vec4 high = vec4(-1e9);
     for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
         color = textureLod(PASS0_raw, base + PASS0_pt * vec2(0.0, i), 0.0) * PASS0_mul;
@@ -200,8 +200,8 @@ vec4 hook() {
     float weight;
     vec4 csum = vec4(0.0);
     float wsum = 0.0;
-    vec4 low = vec4(1.0);
-    vec4 high = vec4(0.0);
+    vec4 low = vec4(1e9);
+    vec4 high = vec4(-1e9);
     for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
         color = textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0) * PASS1_mul;
