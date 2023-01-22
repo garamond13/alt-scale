@@ -15,10 +15,8 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define FLT_EPSILON 1.192092896e-07
-
 //based on https://github.com/ImageMagick/ImageMagick/blob/main/MagickCore/enhance.c
-#define sigmoidize(rgba) (M - log(1.0 / clamp((1.0 / (1.0 + exp(C * (M - 1.0))) - 1.0 / (1.0 + exp(C * M))) * rgba + 1.0 / (1.0 + exp(C * M)), FLT_EPSILON, 1.0 - FLT_EPSILON) - 1.0) / C)
+#define sigmoidize(rgba) (M - log(1.0 / ((1.0 / (1.0 + exp(C * (M - 1.0))) - 1.0 / (1.0 + exp(C * M))) * rgba + 1.0 / (1.0 + exp(C * M))) - 1.0) / C)
 
 vec4 hook() {
     return sigmoidize(clamp(linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0) * HOOKED_mul), 0.0, 1.0));
