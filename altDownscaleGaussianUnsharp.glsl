@@ -60,7 +60,7 @@ vec4 hook() {
     float weight;
     vec4 csum = textureLod(PASS1_raw, PASS1_pos, 0.0) * PASS1_mul;
     float wsum = 1.0;
-    for(float i = 1.0; i <= RADIUS; ++i) {
+    for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
         csum += (textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(i, 0.0), 0.0)) * PASS1_mul * weight;
         wsum += 2.0 * weight;
