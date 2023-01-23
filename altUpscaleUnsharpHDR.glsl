@@ -207,7 +207,7 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 4 (blur in y axis)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 4" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 5" below
 //
 #define S 1.0 //blur spread or amount, (0.0, 10+]
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
@@ -239,7 +239,7 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 5 (blur in x axis and apply unsharp mask)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 4" above
 //
 #define S 1.0 //blur spread or amount, (0.0, 10+]
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
