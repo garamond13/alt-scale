@@ -1,6 +1,6 @@
 //!HOOK MAIN
 //!BIND HOOKED
-//!SAVE PASS0
+//!SAVE PASS1
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * >
 //!DESC alt upscale pass1
 
@@ -91,7 +91,7 @@ vec4 hook() {
 }
 
 //!HOOK MAIN
-//!BIND PASS0
+//!BIND PASS1
 //!WIDTH OUTPUT.w
 //!HEIGHT OUTPUT.h
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * >
@@ -159,8 +159,8 @@ vec4 hook() {
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
 vec4 hook() {
-    float fcoord = fract(PASS0_pos.x * input_size.x - 0.5);
-    vec2 base = PASS0_pos - fcoord * PASS0_pt * vec2(1.0, 0.0);
+    float fcoord = fract(PASS1_pos.x * input_size.x - 0.5);
+    vec2 base = PASS1_pos - fcoord * PASS1_pt * vec2(1.0, 0.0);
     vec4 color;
     float weight;
     vec4 csum = vec4(0.0);
@@ -169,7 +169,7 @@ vec4 hook() {
     vec4 high = vec4(-1e9);
     for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
-        color = textureLod(PASS0_raw, base + PASS0_pt * vec2(i, 0.0), 0.0) * PASS0_mul;
+        color = textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0) * PASS1_mul;
         csum += color * weight;
         wsum += weight;
         if (AR > 0.0 && i >= 0.0 && i <= 1.0) {

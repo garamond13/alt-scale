@@ -1,13 +1,13 @@
 //!HOOK MAIN
 //!BIND HOOKED
-//!SAVE PASS0
+//!SAVE PASS1
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * >
-//!DESC alt upscale pass0
+//!DESC alt upscale pass1
 
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 0 (sigmoidize)
+// USER CONFIGURABLE, PASS 1 (sigmoidize)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" below
 //
 //sigmoidal curve
 #define C 6.5 //contrast, equivalent to mpv's --sigmoid-slope
@@ -23,11 +23,11 @@ vec4 hook() {
 }
 
 //!HOOK MAIN
-//!BIND PASS0
-//!SAVE PASS1
+//!BIND PASS1
+//!SAVE PASS2
 //!HEIGHT OUTPUT.h
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * >
-//!DESC alt upscale pass1
+//!DESC alt upscale pass2
 
 ////////////////////////////////////////////////////////////////////////
 // KERNEL FILTERS LIST
@@ -43,9 +43,9 @@ vec4 hook() {
 #define BICUBIC 9
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 1 (upsample in y axis)
+// USER CONFIGURABLE, PASS 2 (upsample in y axis)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" below
 //
 #define K LANCZOS //kernel filter, see "KERNEL FILTERS LIST"
 #define R 2.0 //kernel radius, (0.0, 10.0+]
@@ -91,8 +91,8 @@ vec4 hook() {
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
 vec4 hook() {
-    float fcoord = fract(PASS0_pos.y * input_size.y - 0.5);
-    vec2 base = PASS0_pos - fcoord * PASS0_pt * vec2(0.0, 1.0);
+    float fcoord = fract(PASS1_pos.y * input_size.y - 0.5);
+    vec2 base = PASS1_pos - fcoord * PASS1_pt * vec2(0.0, 1.0);
     vec4 color;
     float weight;
     vec4 csum = vec4(0.0);
@@ -101,7 +101,7 @@ vec4 hook() {
     vec4 high = vec4(-1e9);
     for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
-        color = textureLod(PASS0_raw, base + PASS0_pt * vec2(0.0, i), 0.0) * PASS0_mul;
+        color = textureLod(PASS1_raw, base + PASS1_pt * vec2(0.0, i), 0.0) * PASS1_mul;
         csum += color * weight;
         wsum += weight;
         if (AR > 0.0 && i >= 0.0 && i <= 1.0) {
@@ -116,11 +116,11 @@ vec4 hook() {
 }
 
 //!HOOK MAIN
-//!BIND PASS1
+//!BIND PASS2
 //!WIDTH OUTPUT.w
 //!HEIGHT OUTPUT.h
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * >
-//!DESC alt upscale pass2
+//!DESC alt upscale pass3
 
 ////////////////////////////////////////////////////////////////////////
 // KERNEL FILTERS LIST
@@ -136,9 +136,9 @@ vec4 hook() {
 #define BICUBIC 9
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 2 (upsample in x axis and desigmoidize)
+// USER CONFIGURABLE, PASS 3 (upsample in x axis and desigmoidize)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" above
 //
 #define K LANCZOS //kernel filter, see "KERNEL FILTERS LIST"
 #define R 2.0 //kernel radius, (0.0, 10.0+]
@@ -149,7 +149,7 @@ vec4 hook() {
 #define P1 0.0 //SAID: chi, BCSPLINE: B, BICUBIC: alpha
 #define P2 0.0 //SAID: eta, BCSPLINE: C
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 0" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
 #define C 6.5 //contrast, equivalent to mpv's --sigmoid-slope
 #define M 0.75 //midpoint, equivalent to mpv's --sigmoid-center
@@ -192,8 +192,8 @@ vec4 hook() {
 #define desigmoidize(rgba) (1.0 / (1.0 + exp(C * (M - rgba))) - 1.0 / (1.0 + exp(C * M))) / ( 1.0 / (1.0 + exp(C * (M - 1.0))) - 1.0 / (1.0 + exp(C * M)))
 
 vec4 hook() {
-    float fcoord = fract(PASS1_pos.x * input_size.x - 0.5);
-    vec2 base = PASS1_pos - fcoord * PASS1_pt * vec2(1.0, 0.0);
+    float fcoord = fract(PASS2_pos.x * input_size.x - 0.5);
+    vec2 base = PASS2_pos - fcoord * PASS2_pt * vec2(1.0, 0.0);
     vec4 color;
     float weight;
     vec4 csum = vec4(0.0);
@@ -202,7 +202,7 @@ vec4 hook() {
     vec4 high = vec4(-1e9);
     for (float i = 1.0 - ceil(R); i <= ceil(R); ++i) {
         weight = get_weight(abs(i - fcoord));
-        color = textureLod(PASS1_raw, base + PASS1_pt * vec2(i, 0.0), 0.0) * PASS1_mul;
+        color = textureLod(PASS2_raw, base + PASS2_pt * vec2(i, 0.0), 0.0) * PASS2_mul;
         csum += color * weight;
         wsum += weight;
         if (AR > 0.0 && i >= 0.0 && i <= 1.0) {

@@ -1,41 +1,11 @@
 //!HOOK MAIN
 //!BIND HOOKED
-//!SAVE PASS0
-//!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * <
-//!DESC alt downscale pass0
-
-vec4 hook() {
-    return linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0) * HOOKED_mul);
-}
-
-//!HOOK MAIN
-//!BIND PASS0
 //!SAVE PASS1
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * <
 //!DESC alt downscale pass1
 
-////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 1 (blur in y axis)
-//
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" below
-//
-#define S 1.0 //blur spread or amount, (0.0, 10+]
-#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
-//
-////////////////////////////////////////////////////////////////////////
-
-#define get_weight(x) (exp(-x * x / (2.0 * S * S)))
-
 vec4 hook() {
-    float weight;
-    vec4 csum = textureLod(PASS0_raw, PASS0_pos, 0.0) * PASS0_mul;
-    float wsum = 1.0;
-    for(float i = 1.0; i <= R; ++i) {
-        weight = get_weight(i);
-        csum += (textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, -i), 0.0) + textureLod(PASS0_raw, PASS0_pos + PASS0_pt * vec2(0.0, i), 0.0)) * PASS0_mul * weight;
-        wsum += 2.0 * weight;
-    }
-    return csum / wsum;
+    return linearize(textureLod(HOOKED_raw, HOOKED_pos, 0.0) * HOOKED_mul);
 }
 
 //!HOOK MAIN
@@ -45,9 +15,9 @@ vec4 hook() {
 //!DESC alt downscale pass2
 
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 2 (blur in x axis)
+// USER CONFIGURABLE, PASS 2 (blur in y axis)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" below
 //
 #define S 1.0 //blur spread or amount, (0.0, 10+]
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
@@ -62,7 +32,7 @@ vec4 hook() {
     float wsum = 1.0;
     for(float i = 1.0; i <= R; ++i) {
         weight = get_weight(i);
-        csum += (textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(i, 0.0), 0.0)) * PASS1_mul * weight;
+        csum += (textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(0.0, -i), 0.0) + textureLod(PASS1_raw, PASS1_pos + PASS1_pt * vec2(0.0, i), 0.0)) * PASS1_mul * weight;
         wsum += 2.0 * weight;
     }
     return csum / wsum;
@@ -71,9 +41,39 @@ vec4 hook() {
 //!HOOK MAIN
 //!BIND PASS2
 //!SAVE PASS3
-//!HEIGHT OUTPUT.h
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * <
 //!DESC alt downscale pass3
+
+////////////////////////////////////////////////////////////////////////
+// USER CONFIGURABLE, PASS 3 (blur in x axis)
+//
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" above
+//
+#define S 1.0 //blur spread or amount, (0.0, 10+]
+#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
+//
+////////////////////////////////////////////////////////////////////////
+
+#define get_weight(x) (exp(-x * x / (2.0 * S * S)))
+
+vec4 hook() {
+    float weight;
+    vec4 csum = textureLod(PASS2_raw, PASS2_pos, 0.0) * PASS2_mul;
+    float wsum = 1.0;
+    for(float i = 1.0; i <= R; ++i) {
+        weight = get_weight(i);
+        csum += (textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(-i, 0.0), 0.0) + textureLod(PASS2_raw, PASS2_pos + PASS2_pt * vec2(i, 0.0), 0.0)) * PASS2_mul * weight;
+        wsum += 2.0 * weight;
+    }
+    return csum / wsum;
+}
+
+//!HOOK MAIN
+//!BIND PASS3
+//!SAVE PASS4
+//!HEIGHT OUTPUT.h
+//!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * <
+//!DESC alt downscale pass4
 
 ////////////////////////////////////////////////////////////////////////
 // KERNEL FILTERS LIST
@@ -91,9 +91,9 @@ vec4 hook() {
 #define NEAREST 11
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 3 (downsample in y axis)
+// USER CONFIGURABLE, PASS 4 (downsample in y axis)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 4" below
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 5" below
 //
 #define K HAMMING //kernel filter, see "KERNEL FILTERS LIST"
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
@@ -147,8 +147,8 @@ vec4 hook() {
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
 vec4 hook() {
-    float fcoord = fract(PASS2_pos.y * input_size.y - 0.5);
-    vec2 base = PASS2_pos - fcoord * PASS2_pt * vec2(0.0, 1.0);
+    float fcoord = fract(PASS3_pos.y * input_size.y - 0.5);
+    vec2 base = PASS3_pos - fcoord * PASS3_pt * vec2(0.0, 1.0);
     float scale = (input_size.y / target_size.y) * AA;
     float r = ceil(R * scale);
     float weight;
@@ -156,18 +156,18 @@ vec4 hook() {
     float wsum = 0.0;
     for (float i = 1.0 - r; i <= r; ++i) {
         weight = get_weight(abs((i - fcoord) / scale));
-        csum += textureLod(PASS2_raw, base + PASS2_pt * vec2(0.0, i), 0.0) * PASS2_mul * weight;
+        csum += textureLod(PASS3_raw, base + PASS3_pt * vec2(0.0, i), 0.0) * PASS3_mul * weight;
         wsum += weight;
     }
     return csum / wsum;
 }
 
 //!HOOK MAIN
-//!BIND PASS3
+//!BIND PASS4
 //!WIDTH OUTPUT.w
 //!HEIGHT OUTPUT.h
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * <
-//!DESC alt downscale pass4
+//!DESC alt downscale pass5
 
 ////////////////////////////////////////////////////////////////////////
 // KERNEL FILTERS LIST
@@ -185,9 +185,9 @@ vec4 hook() {
 #define NEAREST 11
 //
 ////////////////////////////////////////////////////////////////////////
-// USER CONFIGURABLE, PASS 4 (downsample in x axis)
+// USER CONFIGURABLE, PASS 5 (downsample in x axis)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" above
+// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 4" above
 //
 #define K HAMMING //kernel filter, see "KERNEL FILTERS LIST"
 #define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10.0+]
@@ -241,8 +241,8 @@ vec4 hook() {
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
 vec4 hook() {
-    float fcoord = fract(PASS3_pos.x * input_size.x - 0.5);
-    vec2 base = PASS3_pos - fcoord * PASS3_pt * vec2(1.0, 0.0);
+    float fcoord = fract(PASS4_pos.x * input_size.x - 0.5);
+    vec2 base = PASS4_pos - fcoord * PASS4_pt * vec2(1.0, 0.0);
     float scale = (input_size.x / target_size.x) * AA;
     float r = ceil(R * scale);
     float weight;
@@ -250,7 +250,7 @@ vec4 hook() {
     float wsum = 0.0;
     for (float i = 1.0 - r; i <= r; ++i) {
         weight = get_weight(abs((i - fcoord) / scale));
-        csum += textureLod(PASS3_raw, base + PASS3_pt * vec2(i, 0.0), 0.0) * PASS3_mul * weight;
+        csum += textureLod(PASS4_raw, base + PASS4_pt * vec2(i, 0.0), 0.0) * PASS4_mul * weight;
         wsum += weight;
     }
     return delinearize(csum / wsum);
