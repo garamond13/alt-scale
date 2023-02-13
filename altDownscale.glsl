@@ -86,16 +86,16 @@ vec4 hook() {
 
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
+#define SCALE (input_size.y / target_size.y * AA)
+
 vec4 hook() {
     float fcoord = fract(PASS1_pos.y * input_size.y - 0.5);
     vec2 base = PASS1_pos - fcoord * PASS1_pt * vec2(0.0, 1.0);
-    float scale = (input_size.y / target_size.y) * AA;
-    float r = ceil(R * scale);
     float weight;
     vec4 csum = vec4(0.0);
     float wsum = 0.0;
-    for (float i = 1.0 - r; i <= r; ++i) {
-        weight = get_weight(abs((i - fcoord) / scale));
+    for (float i = 1.0 - ceil(R * SCALE); i <= ceil(R * SCALE); ++i) {
+        weight = get_weight(abs((i - fcoord) / SCALE));
         csum += textureLod(PASS1_raw, base + PASS1_pt * vec2(0.0, i), 0.0) * PASS1_mul * weight;
         wsum += weight;
     }
@@ -180,16 +180,16 @@ vec4 hook() {
 
 #define get_weight(x) (x < R ? k(x) : 0.0)
 
+#define SCALE (input_size.x / target_size.x * AA)
+
 vec4 hook() {
     float fcoord = fract(PASS2_pos.x * input_size.x - 0.5);
     vec2 base = PASS2_pos - fcoord * PASS2_pt * vec2(1.0, 0.0);
-    float scale = (input_size.x / target_size.x) * AA;
-    float r = ceil(R * scale);
     float weight;
     vec4 csum = vec4(0.0);
     float wsum = 0.0;
-    for (float i = 1.0 - r; i <= r; ++i) {
-        weight = get_weight(abs((i - fcoord) / scale));
+    for (float i = 1.0 - ceil(R * SCALE); i <= ceil(R * SCALE); ++i) {
+        weight = get_weight(abs((i - fcoord) / SCALE));
         csum += textureLod(PASS2_raw, base + PASS2_pt * vec2(i, 0.0), 0.0) * PASS2_mul * weight;
         wsum += weight;
     }
