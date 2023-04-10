@@ -38,9 +38,10 @@ vec4 hook() {
 #define HAMMING 4
 #define BLACKMAN 5
 #define WELCH 6
-#define SAID 7
-#define BCSPLINE 8
-#define BICUBIC 9
+#define GNW 7 //generalized normal window
+#define SAID 8
+#define BCSPLINE 9
+#define BICUBIC 10
 //
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 2 (upsample in y axis)
@@ -53,8 +54,8 @@ vec4 hook() {
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
 //kernel parameters
-#define P1 0.0 //SAID: chi, BCSPLINE: B, BICUBIC: alpha
-#define P2 0.0 //SAID: eta, BCSPLINE: C
+#define P1 0.0 //GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
+#define P2 0.0 //GNW: n, SAID: eta, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -76,6 +77,8 @@ vec4 hook() {
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
+#elif K == GNW
+    #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
 #elif K == BCSPLINE
@@ -132,9 +135,10 @@ vec4 hook() {
 #define HAMMING 4
 #define BLACKMAN 5
 #define WELCH 6
-#define SAID 7
-#define BCSPLINE 8
-#define BICUBIC 9
+#define GNW 7 //generalized normal window
+#define SAID 8
+#define BCSPLINE 9
+#define BICUBIC 10
 //
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 3 (upsample in x axis and desigmoidize)
@@ -147,8 +151,8 @@ vec4 hook() {
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
 //kernel parameters
-#define P1 0.0 //SAID: chi, BCSPLINE: B, BICUBIC: alpha
-#define P2 0.0 //SAID: eta, BCSPLINE: C
+#define P1 0.0 //GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
+#define P2 0.0 //GNW: n, SAID: eta, BCSPLINE: C
 //
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
@@ -175,6 +179,8 @@ vec4 hook() {
     #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
+#elif K == GNW
+    #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
 #elif K == BCSPLINE
