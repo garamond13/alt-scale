@@ -1,6 +1,7 @@
 //!HOOK MAIN
 //!BIND HOOKED
 //!SAVE PASS1
+//!HEIGHT OUTPUT.h
 //!WHEN OUTPUT.w OUTPUT.h * MAIN.w MAIN.h * >
 //!DESC alt upscale pass1
 
