@@ -8,7 +8,7 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 `altDownscale.glsl` is optimised for and only does downscaling\
 `altDownscaleUnsharp.glsl` is optimised for and only does downscaling, also provides unsharp mask\
 `altDownscaleGaussian.glsl` is optimised for and only does downscaling, also provides gaussian blur\
-`altDownscaleGaussianUnsharp.glsl` is optimised for and only does downscaling, also provides gaussian blur and unsharp mask\
+`altDownscaleGaussianUnsharp.glsl` is optimised for and only does downscaling, also provides gaussian blur and unsharp mask
 
 ## Usage
 - If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/FILE_NAME"`. For an example `glsl-shaders-append="~~/altUpscale.glsl"`.
@@ -36,6 +36,7 @@ Effectively trades between aliasing and ringing artifacts.
 #### Kernel filter parameters (P1) and (P2)
 Some kernel filter functions take additional parameters, they are set here. \
 See references for: \
+BLACKMAN - https://en.wikipedia.org/wiki/Window_function#Blackman_window \
 GNW (generalized normal window) - https://ieeexplore.ieee.org/document/6638833 \
 SAID - https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf \
 BCSPLINE - https://www.cs.utexas.edu/~fussell/courses/cs384g-fall2013/lectures/mitchell/Mitchell.pdf \

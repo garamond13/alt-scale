@@ -40,7 +40,7 @@ vec4 hook() {
 #define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0]
 //
 //kernel filter parameters
-#define P1 0.0 //GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
+#define P1 0.0 //BLACKMAN: a, GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
 #define P2 0.0 //GNW: n, SAID: eta, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ vec4 hook() {
 #elif K == HAMMING
     #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI / R * x)))
 #elif K == BLACKMAN
-    #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
+    #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == GNW
@@ -127,7 +127,7 @@ vec4 hook() {
 #define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0]
 //
 //kernel parameters
-#define P1 0.0 //GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
+#define P1 0.0 //BLACKMAN: a, GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
 #define P2 0.0 //GNW: n, SAID: eta, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
@@ -147,7 +147,7 @@ vec4 hook() {
 #elif K == HAMMING
     #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI / R * x)))
 #elif K == BLACKMAN
-    #define k(x) (sinc(x) * (0.42 + 0.5 * cos(M_PI / R * x) + 0.08 * cos(2.0 * M_PI / R * x)))
+    #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
 #elif K == WELCH
     #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == GNW
