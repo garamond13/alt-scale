@@ -1,8 +1,8 @@
 //!HOOK CHROMA
 //!BIND HOOKED
 //!SAVE PASS1
-//!HEIGHT OUTPUT.h
-//!WHEN OUTPUT.w OUTPUT.h * CHROMA.w CHROMA.h * >
+//!HEIGHT LUMA.h
+//!WHEN LUMA.w LUMA.h * CHROMA.w CHROMA.h * >
 //!DESC alt upscale chroma pass1
 
 ////////////////////////////////////////////////////////////////////////
@@ -97,9 +97,9 @@ vec4 hook() {
 //!HOOK CHROMA
 //!BIND PASS1
 //!SAVE PASS2
-//!WIDTH OUTPUT.w
-//!HEIGHT OUTPUT.h
-//!WHEN OUTPUT.w OUTPUT.h * CHROMA.w CHROMA.h * >
+//!WIDTH LUMA.w
+//!HEIGHT LUMA.h
+//!WHEN LUMA.w LUMA.h * CHROMA.w CHROMA.h * >
 //!DESC alt upscale chroma pass2
 
 ////////////////////////////////////////////////////////////////////////
@@ -194,9 +194,9 @@ vec4 hook() {
 //!HOOK CHROMA
 //!BIND PASS2
 //!SAVE PASS3
-//!WIDTH OUTPUT.w
-//!HEIGHT OUTPUT.h
-//!WHEN OUTPUT.w OUTPUT.h * CHROMA.w CHROMA.h * >
+//!WIDTH LUMA.w
+//!HEIGHT LUMA.h
+//!WHEN LUMA.w LUMA.h * CHROMA.w CHROMA.h * >
 //!DESC alt upscale chroma pass3
 
 vec4 hook() {
@@ -206,9 +206,9 @@ vec4 hook() {
 //!HOOK CHROMA
 //!BIND PASS3
 //!SAVE PASS4
-//!WIDTH OUTPUT.w
-//!HEIGHT OUTPUT.h
-//!WHEN OUTPUT.w OUTPUT.h * CHROMA.w CHROMA.h * >
+//!WIDTH LUMA.w
+//!HEIGHT LUMA.h
+//!WHEN LUMA.w LUMA.h * CHROMA.w CHROMA.h * >
 //!DESC alt upscale chroma pass4
 
 ////////////////////////////////////////////////////////////////////////
@@ -238,9 +238,9 @@ vec4 hook() {
 //!HOOK CHROMA
 //!BIND PASS3
 //!BIND PASS4
-//!WIDTH OUTPUT.w
-//!HEIGHT OUTPUT.h
-//!WHEN OUTPUT.w OUTPUT.h * CHROMA.w CHROMA.h * >
+//!WIDTH LUMA.w
+//!HEIGHT LUMA.h
+//!WHEN LUMA.w LUMA.h * CHROMA.w CHROMA.h * >
 //!DESC alt upscale chroma pass5
 
 ////////////////////////////////////////////////////////////////////////

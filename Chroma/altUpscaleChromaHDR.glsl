@@ -1,8 +1,8 @@
 //!HOOK CHROMA
 //!BIND HOOKED
 //!SAVE PASS1
-//!HEIGHT OUTPUT.h
-//!WHEN OUTPUT.w OUTPUT.h * CHROMA.w CHROMA.h * >
+//!HEIGHT LUMA.h
+//!WHEN LUMA.w LUMA.h * CHROMA.w CHROMA.h * >
 //!DESC alt upscale chroma pass1
 
 ////////////////////////////////////////////////////////////////////////
@@ -96,9 +96,9 @@ vec4 hook() {
 
 //!HOOK CHROMA
 //!BIND PASS1
-//!WIDTH OUTPUT.w
-//!HEIGHT OUTPUT.h
-//!WHEN OUTPUT.w OUTPUT.h * CHROMA.w CHROMA.h * >
+//!WIDTH LUMA.w
+//!HEIGHT LUMA.h
+//!WHEN LUMA.w LUMA.h * CHROMA.w CHROMA.h * >
 //!DESC alt upscale chroma pass2
 
 ////////////////////////////////////////////////////////////////////////
