@@ -18,11 +18,14 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 - Requires `vo=gpu-next`.
 - Note that defualt settings are "simbolic" only, should change them to your liking.
 - Note that all downscale shaders can be used for both SDR and HDR content.
+- Note that HDR versions are just gamma light so you can use them for SDR
 
 ## Settings
 
-#### Kernel filter (K)
-Which kernel filter to use for calculation of kernel weights. See "KERNEL FILTERS LIST" inside the shader for available kernel filters.
+For better understanding of these settings see research https://github.com/garamond13/Finding-the-best-methods-for-image-scaling
+
+#### Kernel function (K)
+Which kernel function to use for calculation of kernel weights. See "KERNEL functions LIST" inside the shader for available kernel functions.
 
 #### Kernel radius (R)
 Kernel radius determines the kernel size, which is `ceil(2 * kernel radius)` when upsampling (upscale) or `ceil(2 * kernel radius * downscale ratio * antialiasing amount)` when downsampling (downscale).
@@ -34,16 +37,18 @@ Effectively values smaller than 1 sharpen the kernel and values larger than 1 bl
 Reduces ringing artifacts.
 
 #### Antialiasing (AA) (Only for downscale)
-Effectively trades between aliasing and ringing artifacts.
+Effectively trades between aliasing and ringing artifacts. The default value is 1.0.
 
-#### Kernel filter parameters (P1) and (P2)
-Some kernel filter functions take additional parameters, they are set here. \
+#### Kernel functions parameters (P1) and (P2)
+Some kernel functions take additional parameters, they are set here. \
+GARAMOND - for referernce see the research above, n is in range (0.0, +inf). n=1.0 its linear window, n=2.0 its welch window, n=inf its box window \
+FSR (modified fsr kernel, based on https://github.com/GPUOpen-Effects/FidelityFX-FSR) - for referernce see the research above, b != 0 && b != 2 && c != 0 \
 See references for: \
+COSINE (power of cosine) - https://en.wikipedia.org/wiki/Window_function#Power-of-sine/cosine_windows
 BLACKMAN - https://en.wikipedia.org/wiki/Window_function#Blackman_window \
 GNW (generalized normal window) - https://ieeexplore.ieee.org/document/6638833 \
 SAID - https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf \
 BCSPLINE - https://www.cs.utexas.edu/~fussell/courses/cs384g-fall2013/lectures/mitchell/Mitchell.pdf \
-BICUBIC - https://en.wikipedia.org/wiki/Bicubic_interpolation
 
 #### Sigmoidal curve settings (C) and (M) (Only for upscale and not part of HDR versions)
 Contrast `C` is equivalent to mpv's `--sigmoid-slope` and midpoint `M` is equivalent to mpv's `--sigmoid-center`.

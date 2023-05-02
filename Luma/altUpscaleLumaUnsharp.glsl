@@ -30,32 +30,30 @@ vec4 hook() {
 //!DESC alt upscale luma pass2
 
 ////////////////////////////////////////////////////////////////////////
-// KERNEL FILTERS LIST
+// KERNEL FUNCTIONS LIST
 //
 #define LANCZOS 1
-#define COSINE 2
-#define HANN 3
-#define HAMMING 4
-#define BLACKMAN 5
-#define WELCH 6
-#define GNW 7 //generalized normal window
-#define SAID 8
-#define BCSPLINE 9
-#define BICUBIC 10
+#define GARAMOND 2
+#define COSINE 3
+#define BLACKMAN 4
+#define GNW 5
+#define SAID 6
+#define FSR 7
+#define BCSPLINE 8
 //
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 2 (upsample in y axis)
 //
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" below
 //
-#define K LANCZOS //kernel filter, see "KERNEL FILTERS LIST"
+#define K LANCZOS //kernel function, see "KERNEL FUNCTIONS LIST"
 #define R 2.0 //kernel radius, (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
-//kernel parameters
-#define P1 0.0 //BLACKMAN: a, GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
-#define P2 0.0 //GNW: n, SAID: eta, BCSPLINE: C
+//kernel function parameters
+#define P1 0.0 //GARAMOND: n, COSINE: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 //GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -67,28 +65,24 @@ vec4 hook() {
 
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
+#elif K == GARAMOND
+    #define k(x) (sinc(x) * (1.0 - pow(x / R, P1)))
 #elif K == COSINE
-    #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
-#elif K == HANN
-    #define k(x) (sinc(x) * (0.5 + 0.5 * cos(M_PI / R * x)))
-#elif K == HAMMING
-    #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI / R * x)))
+    #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
 #elif K == BLACKMAN
     #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
-#elif K == WELCH
-    #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == GNW
     #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
+#elif K == FSR
+    #undef R
+    #define R 2.0
+    #define k(x) ((1.0 / (2.0 * P1 - P1 * P1) * (P1 / (P2 * P2) * x * x - 1.0) * (P1 / (P2 * P2) * x * x - 1.0) - (1.0 / (2.0 * P1 - P1 * P1) - 1.0)) * (0.25 * x * x - 1.0) * (0.25 * x * x - 1.0))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
     #define k(x) (x < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2))
-#elif K == BICUBIC
-    #undef R
-    #define R 2.0
-    #define k(x) (x < 1.0 ? (P1 + 2.0) * x * x * x - (P1 + 3.0) * x * x + 1.0 : P1 * x * x * x - 5.0 * P1 * x * x + 8.0 * P1 * x - 4.0 * P1)
 #endif
 
 #define get_weight(x) (x < R ? k(x) : 0.0)
@@ -127,32 +121,30 @@ vec4 hook() {
 //!DESC alt upscale luma pass3
 
 ////////////////////////////////////////////////////////////////////////
-// KERNEL FILTERS LIST
+// KERNEL FUNCTIONS LIST
 //
 #define LANCZOS 1
-#define COSINE 2
-#define HANN 3
-#define HAMMING 4
-#define BLACKMAN 5
-#define WELCH 6
-#define GNW 7 //generalized normal window
-#define SAID 8
-#define BCSPLINE 9
-#define BICUBIC 10
+#define GARAMOND 2
+#define COSINE 3
+#define BLACKMAN 4
+#define GNW 5
+#define SAID 6
+#define FSR 7
+#define BCSPLINE 8
 //
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 3 (upsample in x axis and desigmoidize)
 //
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" above
 //
-#define K LANCZOS //kernel filter, see "KERNEL FILTERS LIST"
+#define K LANCZOS //kernel function, see "KERNEL FUNCTIONS LIST"
 #define R 2.0 //kernel radius, (0.0, 10.0+]
 #define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
-//kernel parameters
-#define P1 0.0 //BLACKMAN: a, GNW: s, SAID: chi, BCSPLINE: B, BICUBIC: alpha
-#define P2 0.0 //GNW: n, SAID: eta, BCSPLINE: C
+//kernel function parameters
+#define P1 0.0 //GARAMOND: n, COSINE: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 //GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
@@ -169,28 +161,24 @@ vec4 hook() {
 
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
+#elif K == GARAMOND
+    #define k(x) (sinc(x) * (1.0 - pow(x / R, P1)))
 #elif K == COSINE
-    #define k(x) (sinc(x) * cos(M_PI_2 / R * x))
-#elif K == HANN
-    #define k(x) (sinc(x) * (0.5 + 0.5 * cos(M_PI / R * x)))
-#elif K == HAMMING
-    #define k(x) (sinc(x) * (0.54 + 0.46 * cos(M_PI / R * x)))
+    #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
 #elif K == BLACKMAN
     #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
-#elif K == WELCH
-    #define k(x) (sinc(x) * (1.0 - x * x / (R * R)))
 #elif K == GNW
     #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID
     #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
+#elif K == FSR
+    #undef R
+    #define R 2.0
+    #define k(x) ((1.0 / (2.0 * P1 - P1 * P1) * (P1 / (P2 * P2) * x * x - 1.0) * (P1 / (P2 * P2) * x * x - 1.0) - (1.0 / (2.0 * P1 - P1 * P1) - 1.0)) * (0.25 * x * x - 1.0) * (0.25 * x * x - 1.0))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
     #define k(x) (x < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2))
-#elif K == BICUBIC
-    #undef R
-    #define R 2.0
-    #define k(x) (x < 1.0 ? (P1 + 2.0) * x * x * x - (P1 + 3.0) * x * x + 1.0 : P1 * x * x * x - 5.0 * P1 * x * x + 8.0 * P1 * x - 4.0 * P1)
 #endif
 
 #define get_weight(x) (x < R ? k(x) : 0.0)
