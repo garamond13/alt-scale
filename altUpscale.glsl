@@ -33,9 +33,9 @@ vec4 hook() {
 // KERNEL FUNCTIONS LIST
 //
 #define LANCZOS 1
-#define GARAMOND 2
-#define COSINE 3
-#define BLACKMAN 4
+#define COSINE 2
+#define BLACKMAN 3
+#define GARAMOND 4
 #define GNW 5
 #define SAID 6
 #define FSR 7
@@ -52,8 +52,8 @@ vec4 hook() {
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
 //kernel function parameters
-#define P1 0.0 //GARAMOND: n, COSINE: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
-#define P2 0.0 //GNW: n, SAID: eta, FSR: c, BCSPLINE: C
+#define P1 0.0 //COSINE: n, BLACKMAN: a, GARAMOND: n, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 //GARAMOND: m, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -65,12 +65,12 @@ vec4 hook() {
 
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
-#elif K == GARAMOND
-    #define k(x) (sinc(x) * (1.0 - pow(x / R, P1)))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
 #elif K == BLACKMAN
     #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
+#elif K == GARAMOND
+    #define k(x) (sinc(x) * pow((1.0 - pow(x / R, P1)), P2))
 #elif K == GNW
     #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID
@@ -123,9 +123,9 @@ vec4 hook() {
 // KERNEL FUNCTIONS LIST
 //
 #define LANCZOS 1
-#define GARAMOND 2
-#define COSINE 3
-#define BLACKMAN 4
+#define COSINE 2
+#define BLACKMAN 3
+#define GARAMOND 4
 #define GNW 5
 #define SAID 6
 #define FSR 7
@@ -142,8 +142,8 @@ vec4 hook() {
 #define AR 1.0 //antiringing strenght, [0.0, 1.0]
 //
 //kernel function parameters
-#define P1 0.0 //GARAMOND: n, COSINE: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
-#define P2 0.0 //GNW: n, SAID: eta, FSR: c, BCSPLINE: C
+#define P1 0.0 //COSINE: n, BLACKMAN: a, GARAMOND: n, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 //GARAMOND: m, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 1" above
 //
@@ -160,12 +160,12 @@ vec4 hook() {
 
 #if K == LANCZOS
     #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
-#elif K == GARAMOND
-    #define k(x) (sinc(x) * (1.0 - pow(x / R, P1)))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
 #elif K == BLACKMAN
     #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
+#elif K == GARAMOND
+    #define k(x) (sinc(x) * pow((1.0 - pow(x / R, P1)), P2))
 #elif K == GNW
     #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID

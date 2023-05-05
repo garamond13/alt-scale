@@ -41,14 +41,14 @@ Effectively trades between aliasing and ringing artifacts. The default value is 
 
 #### Kernel functions parameters (P1) and (P2)
 Some kernel functions take additional parameters, they are set here. \
-GARAMOND - for referernce see the research above, n is in range (0.0, +inf). n=1.0 its linear window, n=2.0 its welch window, n=inf its box window \
-FSR (modified fsr kernel, based on https://github.com/GPUOpen-Effects/FidelityFX-FSR) - for referernce see the research above, b != 0 && b != 2 && c != 0 \
 See references for: \
-COSINE (power of cosine) - https://en.wikipedia.org/wiki/Window_function#Power-of-sine/cosine_windows
+COSINE (power of cosine) - https://en.wikipedia.org/wiki/Window_function#Power-of-sine/cosine_windows \
 BLACKMAN - https://en.wikipedia.org/wiki/Window_function#Blackman_window \
+GARAMOND (power of garamond) - https://github.com/garamond13/power-of-garamond-window \
 GNW (generalized normal window) - https://ieeexplore.ieee.org/document/6638833 \
 SAID - https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf \
-BCSPLINE - https://www.cs.utexas.edu/~fussell/courses/cs384g-fall2013/lectures/mitchell/Mitchell.pdf \
+FSR (modified fsr kernel, based on https://github.com/GPUOpen-Effects/FidelityFX-FSR) - for referernce see the research above \
+BCSPLINE - https://www.cs.utexas.edu/~fussell/courses/cs384g-fall2013/lectures/mitchell/Mitchell.pdf
 
 #### Sigmoidal curve settings (C) and (M) (Only for upscale and not part of HDR versions)
 Contrast `C` is equivalent to mpv's `--sigmoid-slope` and midpoint `M` is equivalent to mpv's `--sigmoid-center`.
