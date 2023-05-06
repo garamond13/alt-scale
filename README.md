@@ -43,8 +43,8 @@ Effectively trades between aliasing and ringing artifacts. The default value is 
 Some kernel functions take additional parameters, they are set here. \
 See references for: \
 COSINE (power of cosine) - https://en.wikipedia.org/wiki/Window_function#Power-of-sine/cosine_windows \
-BLACKMAN - https://en.wikipedia.org/wiki/Window_function#Blackman_window \
 GARAMOND (power of garamond) - https://github.com/garamond13/power-of-garamond-window \
+BLACKMAN (power of blackman)- https://github.com/garamond13/power-of-blackman \
 GNW (generalized normal window) - https://ieeexplore.ieee.org/document/6638833 \
 SAID - https://www.hpl.hp.com/techreports/2007/HPL-2007-179.pdf \
 FSR (modified fsr kernel, based on https://github.com/GPUOpen-Effects/FidelityFX-FSR) - for referernce see the research above \

@@ -20,8 +20,8 @@ vec4 hook() {
 //
 #define LANCZOS 1
 #define COSINE 2
-#define BLACKMAN 3
-#define GARAMOND 4
+#define GARAMOND 3
+#define BLACKMAN 4
 #define GNW 5
 #define SAID 6
 #define FSR 7
@@ -38,8 +38,8 @@ vec4 hook() {
 #define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0+]
 //
 //kernel function parameters
-#define P1 0.0 //COSINE: n, BLACKMAN: a, GARAMOND: n, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
-#define P2 0.0 //GARAMOND: m, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
+#define P1 0.0 //COSINE: n, GARAMOND: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 //GARAMOND: m, BLACKMAN: n, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -53,10 +53,10 @@ vec4 hook() {
     #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
-#elif K == BLACKMAN
-    #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
 #elif K == GARAMOND
-    #define k(x) (sinc(x) * pow((1.0 - pow(x / R, P1)), P2))
+    #define k(x) (sinc(x) * pow(1.0 - pow(x / R, P1), P2))
+#elif K == BLACKMAN
+    #define k(x) (sinc(x) * pow((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x), P2))
 #elif K == GNW
     #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID
@@ -101,8 +101,8 @@ vec4 hook() {
 //
 #define LANCZOS 1
 #define COSINE 2
-#define BLACKMAN 3
-#define GARAMOND 4
+#define GARAMOND 3
+#define BLACKMAN 4
 #define GNW 5
 #define SAID 6
 #define FSR 7
@@ -119,8 +119,8 @@ vec4 hook() {
 #define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0+]
 //
 //kernel function parameters
-#define P1 0.0 //COSINE: n, BLACKMAN: a, GARAMOND: n, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
-#define P2 0.0 //GARAMOND: m, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
+#define P1 0.0 //COSINE: n, GARAMOND: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 //GARAMOND: m, BLACKMAN: n, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -134,10 +134,10 @@ vec4 hook() {
     #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
-#elif K == BLACKMAN
-    #define k(x) (sinc(x) * ((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x)))
 #elif K == GARAMOND
-    #define k(x) (sinc(x) * pow((1.0 - pow(x / R, P1)), P2))
+    #define k(x) (sinc(x) * pow(1.0 - pow(x / R, P1), P2))
+#elif K == BLACKMAN
+    #define k(x) (sinc(x) * pow((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x), P2))
 #elif K == GNW
     #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
 #elif K == SAID
