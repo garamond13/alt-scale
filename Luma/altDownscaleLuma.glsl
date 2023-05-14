@@ -47,31 +47,31 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define EPSILON 1.192093e-7
 
-#define sinc(x) (x < EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+#define sinc(x) ((x) < EPSILON ? M_PI : sin(M_PI / B * (x)) * B / (x))
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
+    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI : sin(M_PI / R * (x)) * R / (x)))
 #elif K == COSINE
-    #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
+    #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * (x)), P1))
 #elif K == GARAMOND
-    #define k(x) (sinc(x) * pow(1.0 - pow(x / R, P1), P2))
+    #define k(x) (sinc(x) * pow(1.0 - pow((x) / R, P1), P2))
 #elif K == BLACKMAN
-    #define k(x) (sinc(x) * pow((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x), P2))
+    #define k(x) (sinc(x) * pow((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * (x)) + P1 / 2.0 * cos(2.0 * M_PI / R * (x)), P2))
 #elif K == GNW
-    #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
+    #define k(x) (sinc(x) * exp(-pow((x) / P1, P2)))
 #elif K == SAID
-    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
+    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * (x)) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * (x) * (x)))
 #elif K == FSR
     #undef R
     #define R 2.0
-    #define k(x) ((1.0 / (2.0 * P1 - P1 * P1) * (P1 / (P2 * P2) * x * x - 1.0) * (P1 / (P2 * P2) * x * x - 1.0) - (1.0 / (2.0 * P1 - P1 * P1) - 1.0)) * (0.25 * x * x - 1.0) * (0.25 * x * x - 1.0))
+    #define k(x) ((1.0 / (2.0 * P1 - P1 * P1) * (P1 / (P2 * P2) * (x) * (x) - 1.0) * (P1 / (P2 * P2) * (x) * (x) - 1.0) - (1.0 / (2.0 * P1 - P1 * P1) - 1.0)) * (0.25 * (x) * (x) - 1.0) * (0.25 * (x) * (x) - 1.0))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
-    #define k(x) (x < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2))
+    #define k(x) ((x) < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * (x) * (x) * (x) + (-18.0 + 12.0 * P1 + 6.0 * P2) * (x) * (x) + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * (x) * (x) * (x) + (6.0 * P1 + 30.0 * P2) * (x) * (x) + (-12.0 * P1 - 48.0 * P2) * (x) + (8.0 * P1 + 24.0 * P2))
 #endif
 
-#define get_weight(x) (x < R ? k(x) : 0.0)
+#define get_weight(x) ((x) < R ? k(x) : 0.0)
 
 #define SCALE (input_size.y / target_size.y * AA)
 
@@ -128,31 +128,31 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define EPSILON 1.192093e-7
 
-#define sinc(x) (x < EPSILON ? M_PI : sin(M_PI / B * x) * B / x)
+#define sinc(x) ((x) < EPSILON ? M_PI : sin(M_PI / B * (x)) * B / (x))
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * (x < EPSILON ? M_PI : sin(M_PI / R * x) * R / x))
+    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI : sin(M_PI / R * (x)) * R / (x)))
 #elif K == COSINE
-    #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * x), P1))
+    #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * (x)), P1))
 #elif K == GARAMOND
-    #define k(x) (sinc(x) * pow(1.0 - pow(x / R, P1), P2))
+    #define k(x) (sinc(x) * pow(1.0 - pow((x) / R, P1), P2))
 #elif K == BLACKMAN
-    #define k(x) (sinc(x) * pow((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * x) + P1 / 2.0 * cos(2.0 * M_PI / R * x), P2))
+    #define k(x) (sinc(x) * pow((1.0 - P1) / 2.0 + 0.5 * cos(M_PI / R * (x)) + P1 / 2.0 * cos(2.0 * M_PI / R * (x)), P2))
 #elif K == GNW
-    #define k(x) (sinc(x) * exp(-pow(x / P1, P2)))
+    #define k(x) (sinc(x) * exp(-pow((x) / P1, P2)))
 #elif K == SAID
-    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * x) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * x * x))
+    #define k(x) (sinc(x) * cosh(sqrt(2.0 * P2) * M_PI * P1 / (2.0 - P2) * (x)) * exp(-M_PI * M_PI * P1 * P1 / ((2.0 - P2) * (2.0 - P2)) * (x) * (x)))
 #elif K == FSR
     #undef R
     #define R 2.0
-    #define k(x) ((1.0 / (2.0 * P1 - P1 * P1) * (P1 / (P2 * P2) * x * x - 1.0) * (P1 / (P2 * P2) * x * x - 1.0) - (1.0 / (2.0 * P1 - P1 * P1) - 1.0)) * (0.25 * x * x - 1.0) * (0.25 * x * x - 1.0))
+    #define k(x) ((1.0 / (2.0 * P1 - P1 * P1) * (P1 / (P2 * P2) * (x) * (x) - 1.0) * (P1 / (P2 * P2) * (x) * (x) - 1.0) - (1.0 / (2.0 * P1 - P1 * P1) - 1.0)) * (0.25 * (x) * (x) - 1.0) * (0.25 * (x) * (x) - 1.0))
 #elif K == BCSPLINE
     #undef R
     #define R 2.0
-    #define k(x) (x < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * x * x * x + (-18.0 + 12.0 * P1 + 6.0 * P2) * x * x + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * x * x * x + (6.0 * P1 + 30.0 * P2) * x * x + (-12.0 * P1 - 48.0 * P2) * x + (8.0 * P1 + 24.0 * P2))
+    #define k(x) ((x) < 1.0 ? (12.0 - 9.0 * P1 - 6.0 * P2) * (x) * (x) * (x) + (-18.0 + 12.0 * P1 + 6.0 * P2) * (x) * (x) + (6.0 - 2.0 * P1) : (-P1 - 6.0 * P2) * (x) * (x) * (x) + (6.0 * P1 + 30.0 * P2) * (x) * (x) + (-12.0 * P1 - 48.0 * P2) * (x) + (8.0 * P1 + 24.0 * P2))
 #endif
 
-#define get_weight(x) (x < R ? k(x) : 0.0)
+#define get_weight(x) ((x) < R ? k(x) : 0.0)
 
 #define SCALE (input_size.x / target_size.x * AA)
 
