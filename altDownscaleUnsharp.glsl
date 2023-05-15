@@ -47,10 +47,10 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define EPSILON 1.192093e-7
 
-#define sinc(x) ((x) < EPSILON ? M_PI : sin(M_PI / B * (x)) * B / (x))
+#define sinc(x) ((x) < EPSILON ? M_PI / B : sin(M_PI / B * (x)) / (x))
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI : sin(M_PI / R * (x)) * R / (x)))
+    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI / R : sin(M_PI / R * (x)) / (x)))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * (x)), P1))
 #elif K == GARAMOND
@@ -129,10 +129,10 @@ vec4 hook() {
 #define M_PI_2 1.57079632679489661923
 #define EPSILON 1.192093e-7
 
-#define sinc(x) ((x) < EPSILON ? M_PI : sin(M_PI / B * (x)) * B / (x))
+#define sinc(x) ((x) < EPSILON ? M_PI / B : sin(M_PI / B * (x)) / (x))
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI : sin(M_PI / R * (x)) * R / (x)))
+    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI / R : sin(M_PI / R * (x)) / (x)))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * (x)), P1))
 #elif K == GARAMOND
