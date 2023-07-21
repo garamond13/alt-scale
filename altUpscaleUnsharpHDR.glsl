@@ -33,14 +33,14 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define M_PI 3.14159265358979323846
-#define M_PI_2 1.57079632679489661923
-#define EPSILON 1.192093e-7
+#define M_PI 3.1415927
+#define M_PI_2 1.5707963
+#define EPS 1e-6
 
-#define sinc(x) ((x) < EPSILON ? M_PI / B : sin(M_PI / B * (x)) / (x))
+#define sinc(x) ((x) < EPS ? M_PI / B : sin(M_PI / B * (x)) / (x))
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI / R : sin(M_PI / R * (x)) / (x)))
+    #define k(x) (sinc(x) * ((x) < EPS ? M_PI / R : sin(M_PI / R * (x)) / (x)))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * (x)), P1))
 #elif K == GARAMOND
@@ -124,14 +124,14 @@ vec4 hook() {
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define M_PI 3.14159265358979323846
-#define M_PI_2 1.57079632679489661923
-#define EPSILON 1.192093e-7
+#define M_PI 3.1415927
+#define M_PI_2 1.5707963
+#define EPS 1e-6
 
-#define sinc(x) ((x) < EPSILON ? M_PI / B : sin(M_PI / B * (x)) / (x))
+#define sinc(x) ((x) < EPS ? M_PI / B : sin(M_PI / B * (x)) / (x))
 
 #if K == LANCZOS
-    #define k(x) (sinc(x) * ((x) < EPSILON ? M_PI / R : sin(M_PI / R * (x)) / (x)))
+    #define k(x) (sinc(x) * ((x) < EPS ? M_PI / R : sin(M_PI / R * (x)) / (x)))
 #elif K == COSINE
     #define k(x) (sinc(x) * pow(cos(M_PI_2 / R * (x)), P1))
 #elif K == GARAMOND
@@ -205,7 +205,7 @@ vec4 hook() {
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 5" below
 //
 #define S 1.0 //blur spread or amount, (0.0, 10+]
-#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
+#define R 2.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]
 //
 ////////////////////////////////////////////////////////////////////////
 
@@ -237,7 +237,7 @@ vec4 hook() {
 // CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 4" above
 //
 #define S 1.0 //blur spread or amount, (0.0, 10+]
-#define R 3.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]; probably should set it to ceil(3 * S)
+#define R 2.0 //kernel radius (integer as float, e.g. 3.0), (0.0, 10+]
 //
 //sharpnes
 #define A 0.5 //amount of sharpening [0.0, 10+]
