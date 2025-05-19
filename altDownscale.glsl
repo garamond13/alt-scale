@@ -30,21 +30,21 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 2 (downsample in y axis)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 3" below
+// CAUTION! should use the same settings for "USER CONFIGURABLE, PASS 3" below
 //
-#define K LANCZOS //kernel function, see "KERNEL FUNCTIONS LIST"
-#define R 2.0 //kernel radius, (0.0, 10.0+]
-#define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
-#define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0+]
+#define K LANCZOS // kernel function, see "KERNEL FUNCTIONS LIST"
+#define R 2.0 // kernel radius, (0.0, inf)
+#define B 1.0 // kernel blur, (0.0, inf)
+#define AA 1.0 // antialiasing amount, (0.0, inf)
 //
-//kernel function parameters
-#define P1 0.0 //COSINE: n, GARAMOND: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
-#define P2 0.0 //GARAMOND: m, BLACKMAN: n, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
+// kernel function parameters
+#define P1 0.0 // COSINE: n, GARAMOND: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 // GARAMOND: m, BLACKMAN: n, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define M_PI 3.1415927
-#define M_PI_2 1.5707963
+#define M_PI 3.14159265358979323846
+#define M_PI_2 1.57079632679489661923
 #define EPS 1e-6
 
 #define sinc(x) ((x) < EPS ? M_PI / B : sin(M_PI / B * (x)) / (x))
@@ -76,13 +76,13 @@ vec4 hook() {
 #define SCALE (input_size.y / target_size.y * AA)
 
 vec4 hook() {
-    float fcoord = fract(PASS1_pos.y * input_size.y - 0.5);
-    vec2 base = PASS1_pos - fcoord * PASS1_pt * vec2(0.0, 1.0);
+    float f = fract(PASS1_pos.y * input_size.y - 0.5);
+    vec2 base = PASS1_pos - f * PASS1_pt * vec2(0.0, 1.0);
     float weight;
     vec4 csum = vec4(0.0);
     float wsum = 0.0;
     for (float i = 1.0 - ceil(R * SCALE); i <= ceil(R * SCALE); ++i) {
-        weight = get_weight(abs((i - fcoord) / SCALE));
+        weight = get_weight(abs((i - f) / SCALE));
         csum += textureLod(PASS1_raw, base + PASS1_pt * vec2(0.0, i), 0.0) * PASS1_mul * weight;
         wsum += weight;
     }
@@ -111,21 +111,21 @@ vec4 hook() {
 ////////////////////////////////////////////////////////////////////////
 // USER CONFIGURABLE, PASS 3 (downsample in x axis)
 //
-// CAUTION! probably should use the same settings for "USER CONFIGURABLE, PASS 2" above
+// CAUTION! should use the same settings for "USER CONFIGURABLE, PASS 2" above
 //
-#define K LANCZOS //kernel function, see "KERNEL FUNCTIONS LIST"
-#define R 2.0 //kernel radius, (0.0, 10.0+]
-#define B 1.0 //kernel blur, 1.0 means no effect, (0.0, 1.5+]
-#define AA 1.0 //antialiasing amount, reduces aliasing, but increases ringing, (0.0, 1.0+]
+#define K LANCZOS // kernel function, see "KERNEL FUNCTIONS LIST"
+#define R 2.0 // kernel radius, (0.0, inf)
+#define B 1.0 // kernel blur, (0.0, inf)
+#define AA 1.0 // antialiasing amount, (0.0, inf)
 //
-//kernel function parameters
-#define P1 0.0 //COSINE: n, GARAMOND: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
-#define P2 0.0 //GARAMOND: m, BLACKMAN: n, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
+// kernel function parameters
+#define P1 0.0 // COSINE: n, GARAMOND: n, BLACKMAN: a, GNW: s, SAID: chi, FSR: b, BCSPLINE: B
+#define P2 0.0 // GARAMOND: m, BLACKMAN: n, GNW: n, SAID: eta, FSR: c, BCSPLINE: C
 //
 ////////////////////////////////////////////////////////////////////////
 
-#define M_PI 3.1415927
-#define M_PI_2 1.5707963
+#define M_PI 3.14159265358979323846
+#define M_PI_2 1.57079632679489661923
 #define EPS 1e-6
 
 #define sinc(x) ((x) < EPS ? M_PI / B : sin(M_PI / B * (x)) / (x))
@@ -157,13 +157,13 @@ vec4 hook() {
 #define SCALE (input_size.x / target_size.x * AA)
 
 vec4 hook() {
-    float fcoord = fract(PASS2_pos.x * input_size.x - 0.5);
-    vec2 base = PASS2_pos - fcoord * PASS2_pt * vec2(1.0, 0.0);
+    float f = fract(PASS2_pos.x * input_size.x - 0.5);
+    vec2 base = PASS2_pos - f * PASS2_pt * vec2(1.0, 0.0);
     float weight;
     vec4 csum = vec4(0.0);
     float wsum = 0.0;
     for (float i = 1.0 - ceil(R * SCALE); i <= ceil(R * SCALE); ++i) {
-        weight = get_weight(abs((i - fcoord) / SCALE));
+        weight = get_weight(abs((i - f) / SCALE));
         csum += textureLod(PASS2_raw, base + PASS2_pt * vec2(i, 0.0), 0.0) * PASS2_mul * weight;
         wsum += weight;
     }
