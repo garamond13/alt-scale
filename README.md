@@ -6,8 +6,6 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 
 `altUpscale` is optimised for and only does upscaling\
 `altUpscaleUnsharp` is optimised for and only does upscaling, also provides unsharp mask\
-`altUpscaleHDR` is optimised for and only does upscaling; HDR version\
-`altUpscaleUnsharpHDR` is optimised for and only does upscaling, also provides unsharp mask; HDR version\
 `altDownscale` is optimised for and only does downscaling\
 `altDownscaleUnsharp` is optimised for and only does downscaling, also provides unsharp mask\
 `altDownscaleGaussian` is optimised for and only does downscaling, also provides gaussian blur\
@@ -17,8 +15,6 @@ Alt scale is a mpv shader. A 2 pass scaler, an alternative to mpv's built in sca
 - If you place this shader in the same folder as your `mpv.conf`, you can use it with `glsl-shaders-append="~~/FILE_NAME"`. For an example `glsl-shaders-append="~~/altUpscale.glsl"`.
 - Requires `vo=gpu-next`.
 - Note that defualt settings are "simbolic" only, should change them to your liking.
-- Note that all downscale shaders can be used for both SDR and HDR content.
-- Note that HDR versions are just gamma light so you can use them for SDR
 
 ## Settings
 
@@ -88,7 +84,7 @@ B = 12 / (19 + 9 * sqrt(2)), C = 113 / (58 + 216 * sqrt(2)): Robidoux kernel
 B = 6 / (13 + 7 * sqrt(2)), C = 7 / (2 + 12 * sqrt(2)): RobidouxSharp kernel  
 B = (9 - 3 * sqrt(2)) / 7, C = 0.1601886205085204: RobidouxSoft kernel  
 
-#### Sigmoidal curve settings (C) and (M) (Only for upscale and not part of HDR versions)
+#### Sigmoidal curve settings (C) and (M) (Only for upscale versions)
 Contrast `C` is equivalent to mpv's `--sigmoid-slope` and midpoint `M` is equivalent to mpv's `--sigmoid-center`.
 
 ### Gaussian blur and unsharp mask (Only for gaussian and unsharp versions)

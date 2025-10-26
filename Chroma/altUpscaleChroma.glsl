@@ -87,8 +87,8 @@ vec4 hook() {
 
 #define get_weight(x) ((x) < R ? k(x) : 0.0)
 
-vec4 hook() {
-    float f = fract(PASS1_pos.y * input_size.y - 0.5);
+vec4 hook(){
+    float f = fract(PASS1_pos.y * PASS1_size.y - 0.5);
     vec2 base = PASS1_pos - f * PASS1_pt * vec2(0.0, 1.0);
     vec4 color;
     float weight;
@@ -186,7 +186,7 @@ vec4 hook() {
 #define desigmoidize(rgba) (1.0 / (1.0 + exp(C * (M - (rgba)))) - 1.0 / (1.0 + exp(C * M))) / ( 1.0 / (1.0 + exp(C * (M - 1.0))) - 1.0 / (1.0 + exp(C * M)))
 
 vec4 hook() {
-    float f = fract(PASS2_pos.x * input_size.x - 0.5);
+    float f = fract(PASS2_pos.x * PASS2_size.x - 0.5);
     vec2 base = PASS2_pos - f * PASS2_pt * vec2(1.0, 0.0);
     vec4 color;
     float weight;
